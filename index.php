@@ -9,7 +9,9 @@ function dat_loader($class) {
 spl_autoload_register('dat_loader');
 
 $statibus = new statibus(_rqliteIP,_rqlitePort);
-
+$services = $statibus->sql()->select('SELECT * FROM services');
+$uptime = $statibus->sql()->select('SELECT * FROM uptime');
+if ($services == False || isset($services['error'])) {  echo "Database ded."; die(); }
 
 ?>
 
@@ -40,66 +42,31 @@ $statibus = new statibus(_rqliteIP,_rqlitePort);
   </div>
   <div class="item box">
     <div class="services">
-      <div class="container">
 
-        <div class="service">
-          <p class="inline">Test</p>
-          <span class="green inline pull-right mt-1 mr-1">100.00%</span>
-        </div>
-        <div class="uptime">
-          <svg width="100%" height="20" viewBox="0 0 640 20">
-            <?php
-            for ($i = 0; $i <= 630; $i = $i +7) {
-              echo '<rect class="rgreen" height="18" width="5" x="'.$i.'"></rect>';
+        <?php
+
+        echo '<div class="container">';
+        if (isset($services['values'])) {
+          foreach ($services['values'] as $service) {
+            $data = $statibus->getUptimeFromService($service[0],$uptime);
+            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? $data['thirtyDays'] : 'Updating...').'</span></div>';
+            echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 2';
+            if ($data == False) {
+              for ($i = 0; $i <= 630; $i = $i +7) {
+                echo '<rect class="rnew" height="18" width="5" x="'.$i.'"></rect>';
+              }
+            } else {
+
             }
-            ?>
-          </svg>
-        </div>
-        <div class="status">
-          <p class="green pull-right mr-1">Up</p>
-        </div>
+            echo '</svg></div>';
+            echo '<div class="status"><p class="'.($service[2] ? "green" : 'red').' pull-right mr-1">'.($service[2] ? "Up" : 'Down').'</p></div>';
+          }
+        } else {
 
-      </div>
-      <div class="container">
+        }
+        echo '</div>';
 
-        <div class="service">
-          <p class="inline">Test</p>
-          <span class="green inline pull-right mt-1 mr-1">100.00%</span>
-        </div>
-        <div class="uptime">
-          <svg width="100%" height="20" viewBox="0 0 640 20">
-            <?php
-            for ($i = 0; $i <= 630; $i = $i +7) {
-              echo '<rect class="rorange" height="18" width="5" x="'.$i.'"></rect>';
-            }
-            ?>
-          </svg>
-        </div>
-        <div class="status">
-          <p class="green pull-right mr-1">Up</p>
-        </div>
-
-      </div>
-      <div class="container">
-
-        <div class="service">
-          <p class="inline">Test</p>
-          <span class="green inline pull-right mt-1 mr-1">100.00%</span>
-        </div>
-        <div class="uptime">
-          <svg width="100%" height="20" viewBox="0 0 640 20">
-            <?php
-            for ($i = 0; $i <= 630; $i = $i +7) {
-              echo '<rect class="rred" height="18" width="5" x="'.$i.'"></rect>';
-            }
-            ?>
-          </svg>
-        </div>
-        <div class="status">
-          <p class="green pull-right mr-1">Up</p>
-        </div>
-
-      </div>
+        ?>
 
     </div>
   </div>
