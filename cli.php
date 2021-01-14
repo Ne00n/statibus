@@ -21,13 +21,13 @@ if (count($argv) == 1) {
   } elseif ($argv[1] == "list") {
     print("Loading...\n");
     $response = $rqlite->select('SELECT * FROM services');
-    if (!isset($response['error'])) { var_dump($response['content']['results'][0]['values']); } else { print("Error: ".$response['error']."\n"); }
+    if (!isset($response['error']) && $response != False ) { var_dump($response['content']['results'][0]['values']); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
   } elseif ($argv[1] == "add") {
     $response = $rqlite->insert('INSERT INTO services(name,status,method,target) VALUES("'.$argv[2].'",1,"'.$argv[3].'","'.$argv[4].'")');
-    if (!isset($response['error'])) { print("Success\n"); } else { print("Error: ".$response['error']."\n"); }
+    if (!isset($response['error']) && $response != False) { print("Success\n"); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
   } elseif ($argv[1] == "delete") {
     $response = $rqlite->delete('DELETE FROM services WHERE id='.$argv[2]);
-    if (!isset($response['error'])) { print("Success\n"); } else { print("Error: ".$response['error']."\n"); }
+    if (!isset($response['error']) && $response != False ) { print("Success\n"); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
   }
 }
 
