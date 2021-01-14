@@ -7,6 +7,7 @@ define("_title","whatever");
 date_default_timezone_set('Europe/Amsterdam');
 
 //rqlite
-define("_rqlite","127.0.0.1:4001")
+define("_rqliteIP","127.0.0.1");
+define("_rqlitePort",4001);
 
 ?>
