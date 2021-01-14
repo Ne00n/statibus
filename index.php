@@ -55,7 +55,7 @@
           <svg width="100%" height="20" viewBox="0 0 640 20">
             <?php
             for ($i = 0; $i <= 630; $i = $i +7) {
-              echo '<rect class="rgreen" height="18" width="5" x="'.$i.'"></rect>';
+              echo '<rect class="rorange" height="18" width="5" x="'.$i.'"></rect>';
             }
             ?>
           </svg>
@@ -75,7 +75,7 @@
           <svg width="100%" height="20" viewBox="0 0 640 20">
             <?php
             for ($i = 0; $i <= 630; $i = $i +7) {
-              echo '<rect class="rgreen" height="18" width="5" x="'.$i.'"></rect>';
+              echo '<rect class="rred" height="18" width="5" x="'.$i.'"></rect>';
             }
             ?>
           </svg>
