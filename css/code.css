@@ -126,10 +126,18 @@ small {
   fill: #9b3838;
 }
 
+.rnew {
+  fill: #525d56;
+}
+
 .rorange {
   fill: #9f762c;
 }
 
 .green {
  color: #379056;
+}
+
+.red {
+ color: #9b3838;
 }
