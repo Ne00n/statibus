@@ -6,9 +6,9 @@ class rqlite {
   private $port;
 
   public function __construct($node="127.0.0.1",$port=4001) {
-        $this->node = $node;
-        $this->port = $port;
-    }
+    $this->node = $node;
+    $this->port = $port;
+  }
 
   public function fetchData($url,$method = "GET",$postfields = NULL) {
     $ch = curl_init();
@@ -28,20 +28,38 @@ class rqlite {
     $result['content'] = curl_exec($ch);
     $result['http'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+    if ($result['http'] == 200) {
+      $result['content'] = json_decode($result['content'],true);
+      $result = $this->checkForErrors($result);
+      return $result;
+    } else {
+      return False;
+    }
+  }
+
+  private function checkForErrors($result) {
+    foreach ($result['content']['results'] as $entry) {
+      foreach ($entry as $key => $row) {
+        if ($key == "error") { return array("error" => $row); }
+      }
+    }
     return $result;
   }
 
   public function init() {
-    //services
-    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST',
-    '["CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL)"]');
+    $result = $this->insert("CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL)");
+    if (!$result) { return $result; }
+    $result = $this->insert("CREATE TABLE outages (id INTEGER NOT NULL PRIMARY KEY,serviceID INTEGER NOT NULL,status INTEGER NOT NULL, timestamp INTEGER NOT NULL,FOREIGN KEY(serviceID) REFERENCES services(id))");
+    if (!$result) { return $result; }
+    $result = $this->insert("CREATE TABLE uptime (serviceID INTEGER NOT NULL PRIMARY KEY,oneDay DECIMAL(7,4) NOT NULL, sevenDays DECIMAL(7,4) NOT NULL, fourteenDays DECIMAL(7,4) NOT NULL, thirtyDays DECIMAL(7,4) NOT NULL, ninetyDays DECIMAL(7,4) NOT NULL, FOREIGN KEY(serviceID) REFERENCES services(id))");
+    if (!$result) { return $result; }
     return $result;
   }
 
   public function insert($input) {
     $command = SQLite3::escapeString($input);
-    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST','["'.$command.'"]');
-    $result['content'] = json_decode($result['content'],true);
+    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST','['.json_encode($command).']');
+    if (!$result) { return $result; }
     return $result;
   }
 
@@ -53,7 +71,7 @@ class rqlite {
     $command = SQLite3::escapeString($input);
     $command = urlencode($command);
     $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/query?level=none&pretty&timings&q='.$command);
-    $result['content'] = json_decode($result['content'],true);
+    if (!$result) { return $result; }
     return $result;
   }
 

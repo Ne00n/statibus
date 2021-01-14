@@ -1,0 +1,34 @@
+<?php
+
+if (php_sapi_name() != 'cli') { exit(); }
+include 'configs/config.php';
+
+function dat_loader($class) {
+    include 'class/' . $class . '.php';
+}
+
+spl_autoload_register('dat_loader');
+
+$rqlite = new rqlite(_rqliteIP,_rqlitePort);
+
+if (count($argv) == 1) {
+  print("add <name> <ping,port,http> <ip,ip:port,url>\n");
+  print("delete <id>\n");
+  print("list\n");
+} else {
+  if ($argv[1] == "init") {
+    $response = $rqlite->init();
+  } elseif ($argv[1] == "list") {
+    print("Loading...\n");
+    $response = $rqlite->select('SELECT * FROM services');
+    if (!isset($response['error'])) { var_dump($response['content']['results'][0]['values']); } else { print("Error: ".$response['error']."\n"); }
+  } elseif ($argv[1] == "add") {
+    $response = $rqlite->insert('INSERT INTO services(name,status,method,target) VALUES("'.$argv[2].'",1,"'.$argv[3].'","'.$argv[4].'")');
+    if (!isset($response['error'])) { print("Success\n"); } else { print("Error: ".$response['error']."\n"); }
+  } elseif ($argv[1] == "delete") {
+    $response = $rqlite->delete('DELETE FROM services WHERE id='.$argv[2]);
+    if (!isset($response['error'])) { print("Success\n"); } else { print("Error: ".$response['error']."\n"); }
+  }
+}
+
+?>
