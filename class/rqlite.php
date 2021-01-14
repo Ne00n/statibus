@@ -51,7 +51,7 @@ class rqlite {
     if (!$result) { return $result; }
     $result = $this->insert("CREATE TABLE outages (id INTEGER NOT NULL PRIMARY KEY,serviceID INTEGER NOT NULL,status INTEGER NOT NULL, timestamp INTEGER NOT NULL,FOREIGN KEY(serviceID) REFERENCES services(id))");
     if (!$result) { return $result; }
-    $result = $this->insert("CREATE TABLE uptime (serviceID INTEGER NOT NULL PRIMARY KEY,oneDay DECIMAL(7,4) NOT NULL, sevenDays DECIMAL(7,4) NOT NULL, fourteenDays DECIMAL(7,4) NOT NULL, thirtyDays DECIMAL(7,4) NOT NULL, ninetyDays DECIMAL(7,4) NOT NULL, FOREIGN KEY(serviceID) REFERENCES services(id))");
+    $result = $this->insert("CREATE TABLE uptime (serviceID INTEGER NOT NULL PRIMARY KEY, detailed TEXT NOT NULL,oneDay DECIMAL(7,4) NOT NULL, sevenDays DECIMAL(7,4) NOT NULL, fourteenDays DECIMAL(7,4) NOT NULL, thirtyDays DECIMAL(7,4) NOT NULL, ninetyDays DECIMAL(7,4) NOT NULL, FOREIGN KEY(serviceID) REFERENCES services(id))");
     if (!$result) { return $result; }
     return $result;
   }
@@ -72,7 +72,7 @@ class rqlite {
     $command = urlencode($command);
     $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/query?level=none&pretty&timings&q='.$command);
     if (!$result) { return $result; }
-    return $result;
+    if (isset($result['error'])) { return $result; } else { return $result['content']['results'][0]; }
   }
 
   public function delete($input) {
