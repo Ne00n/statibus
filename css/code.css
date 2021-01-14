@@ -9,7 +9,7 @@
 }
 
 html {
-  background-color: #131a26;
+  background-color: #0d121a;
   font-size: 18px;
   font-family: 'Yusei Magic';
   color: white;
@@ -46,6 +46,12 @@ html {
   }
 }
 
+.box {
+  background-color: #151a22;
+  border-radius: 5px;
+  box-shadow: 0.2px 0.2px 0.2px rgba(0,0,0,.5);
+}
+
 .text-right {
   text-align: right;
 }
@@ -80,11 +86,6 @@ html {
 
 .inline {
   display: inline-block;
-}
-
-.box {
-  background-color: #212937;
-  border-radius: 5px;
 }
 
 .item {
