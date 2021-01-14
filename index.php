@@ -1,15 +1,30 @@
+<?php
+
+include 'configs/config.php';
+
+function dat_loader($class) {
+    include 'class/' . $class . '.php';
+}
+
+spl_autoload_register('dat_loader');
+
+$statibus = new statibus(_rqliteIP,_rqlitePort);
+
+
+?>
+
 <html>
 
 <head>
   <meta charset="utf-8">
-  <title>statibus</title>
+  <title><?php echo _title; ?></title>
   <link rel="stylesheet" href="css/code.css">
 </head>
 
 <body>
   <div class="container">
   <div class="item">
-    <h1>whatever</h1>
+    <h1><?php echo _title; ?></h1>
   </div>
   <div class="item text-right">
     <h2>Service Status</h2>
