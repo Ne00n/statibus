@@ -7,7 +7,7 @@ class rqlite {
 
   public function __construct($node="127.0.0.1",$port=4001) {
         $this->node = $node;
-        $this->port = $port
+        $this->port = $port;
     }
 
   public function fetchData($url,$method = "GET",$postfields = NULL) {

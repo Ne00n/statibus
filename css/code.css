@@ -1,0 +1,126 @@
+/* yusei-magic-regular - latin */
+@font-face {
+  font-family: 'Yusei Magic';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('../fonts/yusei-magic-v2-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/yusei-magic-v2-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+html {
+  background-color: #131a26;
+  font-size: 18px;
+  font-family: 'Yusei Magic';
+  color: white;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  justify-content: center;
+  align-items:center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
+}
+
+@media (min-width: 992px) {
+  .container {
+      padding-left: 40px;
+      padding-right: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  div .service {
+    flex: 0 100%;
+  }
+  div .uptime {
+    flex: 0 100%;
+  }
+  div .status {
+    flex: 0 100%;
+    display: none;
+  }
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.pull-right {
+  float: right;
+}
+
+.mt-1 {
+  margin-top: 1em;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.ml-1 {
+ margin-left: 1em;
+}
+
+.mr-1 {
+  margin-right: 1em;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.box {
+  background-color: #212937;
+  border-radius: 5px;
+}
+
+.item {
+  width: 50%;
+  height: 100%;
+  margin-bottom: 2%;
+}
+
+.item:nth-child(3n) {
+  width: 100%;
+}
+
+.service {
+  flex: 0 20%;
+}
+
+.uptime {
+  flex: 0 70%;
+}
+
+.status {
+  flex: 0 10%;
+}
+
+.block {
+  flex: 0 33%;
+}
+
+small {
+  font-size: small;
+}
+
+.rgreen {
+  fill: #379056;
+}
+
+.green {
+ color: #379056;
+}
