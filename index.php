@@ -45,26 +45,43 @@ if ($services == False || isset($services['error'])) {  echo "Database ded."; di
 
         <?php
 
-        echo '<div class="container">';
         if (isset($services['values'])) {
           foreach ($services['values'] as $service) {
-            $data = $statibus->getUptimeFromService($service[0],$uptime);
-            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? $data['thirtyDays'] : 'Updating...').'</span></div>';
-            echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 2';
-            if ($data == False) {
-              for ($i = 0; $i <= 630; $i = $i +7) {
-                echo '<rect class="rnew" height="18" width="5" x="'.$i.'"></rect>';
+            echo '<div class="container">';
+            $data = tools::getUptimeFromService($service[0],$uptime);
+            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? $data[6]."%" : 'Updating...').'</span></div>';
+            echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 20"';
+            $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
+            $keys = array_keys($detailed);
+            if ($detailed == False || $detailed == "[]") {
+              for ($i = 0; $i <= 89; $i++) {
+                echo '<rect class="rnew" height="18" width="5" x="'.$i*$spacing.'"></rect>';
               }
             } else {
-
+              for ($i = 90; $i > 0; $i = $i -1) {
+                $negate = 90 - count($detailed);
+                if ($negate <= $i) {
+                  $selector = $i - $negate;
+                  $percentage = $detailed[$keys[$selector]];
+                  if ($percentage > 99) {
+                    echo '<rect class="rgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                  } elseif ($percentage < 99 && $percentage > 97) {
+                    echo '<rect class="rorange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                  } else {
+                    echo '<rect class="rred" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                  }
+                } else {
+                  echo '<rect class="rnew" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                }
+              }
             }
             echo '</svg></div>';
             echo '<div class="status"><p class="'.($service[2] ? "green" : 'red').' pull-right mr-1">'.($service[2] ? "Up" : 'Down').'</p></div>';
+            echo '</div>';
           }
         } else {
 
         }
-        echo '</div>';
 
         ?>
 
