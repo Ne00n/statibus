@@ -16,6 +16,12 @@ if ($services == False || isset($services['error'])) {  echo "Database ded."; di
 $isDown = $statibus->isDownTimeHuh($services);
 $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
 
+if (isset($services['values'])) {
+  $lastrun = $services['values'][count($services['values']) -1][7];
+} else {
+  $lastrun = "n/a";
+}
+
 ?>
 
 <html>
@@ -33,7 +39,8 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
     <a href="index.php"><h1><?php echo _title; ?></h1></a>
   </div>
   <div id="rstatus" class="item text-right">
-    <h2>Service Status</h2>
+    <h2 class="mb-0">Service Status</h2>
+    <p class="mt-0">Last updated: <?php echo date('d M h:m', $lastrun); ?></p>
   </div>
   <div class="item box">
     <?php
@@ -120,10 +127,8 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
       </div>
     </div>
   </div>
-</div>
 
 <footer>
-
 
 </footer>
 
