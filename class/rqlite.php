@@ -48,7 +48,7 @@ class rqlite {
   }
 
   public function init() {
-    $result = $this->insert("CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL,timeout INTEGER NOT NULL,httpcodes TEXT NOT NULL)");
+    $result = $this->insert("CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL,timeout INTEGER NOT NULL,httpcodes TEXT NOT NULL,lastrun INTEGER NULL)");
     if (!$result) { return $result; }
     $result = $this->insert("CREATE TABLE outages (id INTEGER NOT NULL PRIMARY KEY,serviceID INTEGER NOT NULL,status INTEGER NOT NULL, timestamp INTEGER NOT NULL,FOREIGN KEY(serviceID) REFERENCES services(id))");
     if (!$result) { return $result; }

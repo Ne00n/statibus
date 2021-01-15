@@ -42,12 +42,13 @@ class cron {
     if ($current == 0 && $oldState == 1) {
       print($id." went offline\n");
       $this->rqlite->insert('INSERT INTO outages (serviceID,status,timestamp) VALUES("'.$id.'",0,'.time().')');
-      $this->rqlite->update('UPDATE services SET status = 0 WHERE id="'.$id.'"');
+      $this->rqlite->update('UPDATE services SET status = 0,lastrun = '.time().' WHERE id="'.$id.'"');
     } elseif ($current == 1 && $oldState == 0) {
       print($id." went is back online\n");
       $this->rqlite->insert('INSERT INTO outages (serviceID,status,timestamp) VALUES("'.$id.'",1,'.time().')');
-      $this->rqlite->update('UPDATE services SET status = 1 WHERE id="'.$id.'"');
+      $this->rqlite->update('UPDATE services SET status = 1,lastrun = '.time().' WHERE id="'.$id.'"');
     } else {
+      $this->rqlite->update('UPDATE services SET lastrun = '.time().' WHERE id="'.$id.'"');
       print($id." no change\n");
     }
   }
