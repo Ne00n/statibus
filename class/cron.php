@@ -75,7 +75,7 @@ class cron {
         $response = $this->rqlite->update('UPDATE uptime SET oneDay = 100.00,sevenDays = 100.00,fourteenDays = 100.00,thirtyDays = 100.00,ninetyDays = 100.00 WHERE serviceID = '.$row[0].' ');
       } else {
         $data = $this->calcUptime($outages);
-        $detailed = json_decode(base64_decode($row[1])); $current = date("d.m");
+        $detailed = json_decode(base64_decode($row[1]),true); $current = date("d.m");
         $detailed[$current] = $data[1];
         $detailed = base64_encode(json_encode($detailed));
         $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$detailed.'", oneDay = '.$data[1].',sevenDays = '.$data[7].',fourteenDays = '.$data[14].',thirtyDays = '.$data[30].',ninetyDays = '.$data[90].' WHERE serviceID = '.$row[0].' ');
