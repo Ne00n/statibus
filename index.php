@@ -90,7 +90,7 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
             echo '</div>';
           }
         } else {
-
+          echo '<h2 class="text-center">No services added.</h2>';
         }
 
         ?>
