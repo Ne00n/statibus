@@ -1,6 +1,6 @@
 # statibus
 
-Minimalistic Statuspage with 60s Ping, Port & HTTP(S) IPv4 & IPv6 Monitoring.
+Minimalistic Statuspage with 60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Monitoring.
 
 ![Overview](https://i.imgur.com/MhTiDTg.png)
 
@@ -28,7 +28,7 @@ php cli.php init
 php cli.php add Server ping 8.8.8.8
 php cli.php add Service port 8.8.8.8:80 2
 php cli.php add Website http https://website.com 2 200
-#php cli.php list
+php cli.php list
 #php cli.php delete <id>
 ```
 5. Enable the cronjobs, see => configs/cron|uptime.example<br />
