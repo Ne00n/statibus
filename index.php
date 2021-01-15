@@ -30,7 +30,7 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
 <body>
   <div class="container">
   <div class="item">
-    <h1><?php echo _title; ?></h1>
+    <a href="index.php"><h1><?php echo _title; ?></h1></a>
   </div>
   <div id="rstatus" class="item text-right">
     <h2>Service Status</h2>
