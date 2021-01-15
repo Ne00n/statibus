@@ -28,6 +28,11 @@ class cron {
         }
         $status = (int)$fp;
         $this->updateStatus($service[0],$status,$service[2]);
+      } elseif ($service[3] == "http") {
+        $response = $this->rqlite->fetchData($service[4],"GET",NULL,True,$service[5]);
+        if (strpos($service[6], ',') !== false) {  $statusCodes = explode( ',', $service[6]); } else { $statusCodes = array($service[6]); }
+        if (in_array($response['http'], $statusCodes)) { $status = 1; } else { $status = 0; }
+        $this->updateStatus($service[0],$status,$service[2]);
       }
     }
   }

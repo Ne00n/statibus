@@ -10,13 +10,13 @@ class rqlite {
     $this->port = $port;
   }
 
-  public function fetchData($url,$method = "GET",$postfields = NULL) {
+  public function fetchData($url,$method = "GET",$postfields = NULL,$raw=False,$timeout=20) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL,$url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,20);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,$timeout);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
     if ($method == "POST") {
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
@@ -28,6 +28,7 @@ class rqlite {
     $result['content'] = curl_exec($ch);
     $result['http'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+    if ($raw) { return $result; }
     if ($result['http'] == 200) {
       $result['content'] = json_decode($result['content'],true);
       $result = $this->checkForErrors($result);
@@ -47,7 +48,7 @@ class rqlite {
   }
 
   public function init() {
-    $result = $this->insert("CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL,timeout INTEGER NOT NULL)");
+    $result = $this->insert("CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL,timeout INTEGER NOT NULL,httpcodes TEXT NOT NULL)");
     if (!$result) { return $result; }
     $result = $this->insert("CREATE TABLE outages (id INTEGER NOT NULL PRIMARY KEY,serviceID INTEGER NOT NULL,status INTEGER NOT NULL, timestamp INTEGER NOT NULL,FOREIGN KEY(serviceID) REFERENCES services(id))");
     if (!$result) { return $result; }
