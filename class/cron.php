@@ -18,6 +18,15 @@ class cron {
         exec("ping -c 3 " . $service[4], $output, $result);
         if ($result == 0) { $status = 1; } else { $status = 0; }
         $this->updateStatus($service[0],$status,$service[2]);
+      } elseif ($service[3] == "port") {
+        list($ip, $port) = explode(":", $service[4]);
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+          $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $service[5]);
+        } else {
+          $fp = fsockopen($ip,$port, $errno, $errstr, $service[5]);
+        }
+        $status = (int)$fp;
+        $this->updateStatus($service[0],$status,$service[2]);
       }
     }
   }

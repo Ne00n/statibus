@@ -1,6 +1,6 @@
 # statibus
 
-Status Page with 60s Ping, Port & HTTP(S) Monitoring.
+Status Page with 60s Ping, Port & HTTP(S) IPv4 & IPv6 Monitoring.
 
 ![Overview](https://i.imgur.com/MhTiDTg.png)
 
@@ -24,7 +24,9 @@ php cli.php init
 ```
 4. You can add the first service by running:
 ```
+#php cli.php add <name> <method> <target> <timeout>
 php cli.php add Server ping 8.8.8.8
+php cli.php add Service port 8.8.8.8:80 2
 ```
 5. Enable the cronjobs, see => configs/cron|uptime.example<br />
 Run cron every 60s, uptime is for generating the uptime percentages, every 5 minutes is fine

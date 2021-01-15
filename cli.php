@@ -23,7 +23,8 @@ if (count($argv) == 1) {
     $response = $rqlite->select('SELECT * FROM services');
     if (!isset($response['error']) && $response != False ) { var_dump($response['values']); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
   } elseif ($argv[1] == "add") {
-    $response = $rqlite->insert('INSERT INTO services(name,status,method,target) VALUES("'.$argv[2].'",1,"'.$argv[3].'","'.$argv[4].'")');
+    if (!isset($argv[5])) { $argv[5] = 3; }
+    $response = $rqlite->insert('INSERT INTO services(name,status,method,target,timeout) VALUES("'.$argv[2].'",1,"'.$argv[3].'","'.$argv[4].'","'.$argv[5].'")');
     if (!isset($response['error']) && $response != False) { print("Success\n"); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
   } elseif ($argv[1] == "delete") {
     $response = $rqlite->delete('DELETE FROM services WHERE id='.$argv[2]);
