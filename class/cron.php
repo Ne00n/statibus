@@ -67,18 +67,24 @@ class cron {
     return $response;
   }
 
+  private function generateDetailed($row,$outages) {
+    if ($outages != NULL) { $data = $this->calcUptime($outages); } else { $data = array(); }
+    $detailed = json_decode(base64_decode($row[1]),true); $current = date("d.m");
+    if ($outages != NULL) { $detailed[$current] = $data[1]; } else { $detailed[$current] = 100; }
+    $detailed = base64_encode(json_encode($detailed));
+    return array("detailed" => $detailed,"data" => $data);
+  }
+
   public function uptime() {
     $uptime = $this->rqlite->select('SELECT * FROM uptime');
     foreach ($uptime['values'] as $row) {
       $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID = '.$row[0].' ');
       if (!isset($outages['values'])) {
-        $response = $this->rqlite->update('UPDATE uptime SET oneDay = 100.00,sevenDays = 100.00,fourteenDays = 100.00,thirtyDays = 100.00,ninetyDays = 100.00 WHERE serviceID = '.$row[0].' ');
+        $response = $this->generateDetailed($row,NULL);
+        $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$response['detailed'].'", oneDay = 100.00,sevenDays = 100.00,fourteenDays = 100.00,thirtyDays = 100.00,ninetyDays = 100.00 WHERE serviceID = '.$row[0].' ');
       } else {
-        $data = $this->calcUptime($outages);
-        $detailed = json_decode(base64_decode($row[1]),true); $current = date("d.m");
-        $detailed[$current] = $data[1];
-        $detailed = base64_encode(json_encode($detailed));
-        $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$detailed.'", oneDay = '.$data[1].',sevenDays = '.$data[7].',fourteenDays = '.$data[14].',thirtyDays = '.$data[30].',ninetyDays = '.$data[90].' WHERE serviceID = '.$row[0].' ');
+        $response = $this->generateDetailed($row,$outages);
+        $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$response['detailed'].'", oneDay = '.$response['data'][1].',sevenDays = '.$response['data'][7].',fourteenDays = '.$response['data'][14].',thirtyDays = '.$response['data'][30].',ninetyDays = '.$response['data'][90].' WHERE serviceID = '.$row[0].' ');
       }
     }
   }
