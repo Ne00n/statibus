@@ -46,6 +46,9 @@ html {
   div .status {
     flex: 0 100%;
   }
+  div .block {
+    flex: 0 100%;
+  }
   #rstatus {
     display: none;
   }
