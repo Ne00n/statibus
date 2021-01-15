@@ -31,7 +31,7 @@ Run cron every 60s, uptime is for generating the uptime percentages, every 5 min
 
 You can access the databse anytime via rest api or ./rqlite
 
-CLI:
+**CLI**<br />
 php cli.php add <name> <method> <target> <timeout> <httpcode(s)>
 ```
 php cli.php add Server ping 8.8.8.8
