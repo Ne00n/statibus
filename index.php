@@ -59,7 +59,7 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
           foreach ($services['values'] as $service) {
             echo '<div class="container">';
             $data = tools::getUptimeFromService($service[0],$uptime);
-            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? tools::escape($data[6])."%" : 'Updating...').'</span></div>';
+            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? tools::escape($data[6])."%" : 'n/a').'</span></div>';
             echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 20">';
             $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
             $keys = array_keys($detailed);
