@@ -40,7 +40,7 @@ if (isset($services['values'])) {
   </div>
   <div id="rstatus" class="item text-right">
     <h2 class="mb-0">Service Status</h2>
-    <p class="mt-0">Last updated: <?php echo date('d M h:i', $lastrun); ?></p>
+    <p class="mt-0">Last update: <?php echo date('d M h:i', $lastrun); ?></p>
   </div>
   <div class="item box">
     <?php
