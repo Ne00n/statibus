@@ -69,7 +69,7 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
               }
             } else {
               for ($i = 90; $i > 0; $i = $i -1) {
-                $negate = 90 - count($detailed);
+                $negate = 91 - count($detailed);
                 if ($negate <= $i) {
                   $selector = $i - $negate;
                   $percentage = $detailed[$keys[$selector]];
