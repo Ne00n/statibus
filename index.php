@@ -66,7 +66,7 @@ if (isset($services['values'])) {
           foreach ($services['values'] as $service) {
             echo '<div class="container">';
             $data = tools::getUptimeFromService($service[0],$uptime);
-            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? tools::escape($data[6])."%" : 'n/a').'</span></div>';
+            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? tools::escape($data[5])."%" : 'n/a').'</span></div>';
             echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 20">';
             $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
             $keys = array_keys($detailed);
@@ -80,8 +80,10 @@ if (isset($services['values'])) {
                 if ($negate <= $i) {
                   $selector = $i - $negate;
                   $percentage = $detailed[$keys[$selector]];
-                  if ($percentage > 99) {
+                  if ($percentage == 100) {
                     echo '<rect class="rgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                  } elseif ($percentage < 100 && $percentage > 99) {
+                     echo '<rect class="rgreendark" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                   } elseif ($percentage < 99 && $percentage > 97) {
                     echo '<rect class="rorange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                   } else {
