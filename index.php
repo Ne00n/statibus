@@ -58,7 +58,7 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
           foreach ($services['values'] as $service) {
             echo '<div class="container">';
             $data = tools::getUptimeFromService($service[0],$uptime);
-            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? $data[6]."%" : 'Updating...').'</span></div>';
+            echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? Tools::escape($data[6])."%" : 'Updating...').'</span></div>';
             echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 20"';
             $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
             $keys = array_keys($detailed);
@@ -106,15 +106,15 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
     <div class="container">
 
       <div class="block mt-1 text-center">
-        <span class="inline"><?php echo $percentages['1day']; ?>%</span>
+        <span class="inline"><?php echo Tools::escape($percentages['1day']); ?>%</span>
         <p class="mt-0">Last 24 hours</p>
       </div>
       <div class="block mt-1 text-center">
-        <span class="inline"><?php echo $percentages['7days']; ?>%</span>
+        <span class="inline"><?php echo Tools::escape($percentages['7days']); ?>%</span>
         <p class="mt-0">Last 7 days</p>
       </div>
       <div class="block mt-1 text-center">
-        <span class="inline"><?php echo $percentages['30days']; ?>%</span>
+        <span class="inline"><?php echo Tools::escape($percentages['30days']); ?>%</span>
         <p class="mt-0">Last 30 days</p>
       </div>
     </div>
