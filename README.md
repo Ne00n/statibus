@@ -28,6 +28,7 @@ php cli.php init
 php cli.php add Server ping 8.8.8.8
 php cli.php add Service port 8.8.8.8:80 2
 php cli.php add Website http https://website.com 2 200
+php cli.php add Website http https://website.com 2 400,404
 php cli.php list
 #php cli.php delete <id>
 ```
