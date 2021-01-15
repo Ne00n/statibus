@@ -13,6 +13,9 @@ $services = $statibus->sql()->select('SELECT * FROM services');
 $uptime = $statibus->sql()->select('SELECT * FROM uptime');
 if ($services == False || isset($services['error'])) {  echo "Database ded."; die(); }
 
+$isDown = $statibus->isDownTimeHuh($services);
+$percentages = $statibus->gimmahDowntimePercentaaages($uptime);
+
 ?>
 
 <html>
@@ -28,11 +31,17 @@ if ($services == False || isset($services['error'])) {  echo "Database ded."; di
   <div class="item">
     <h1><?php echo _title; ?></h1>
   </div>
-  <div class="item text-right">
+  <div id="rstatus" class="item text-right">
     <h2>Service Status</h2>
   </div>
   <div class="item box">
-    <h2 class="ml-1">All systems <blah class="green">operational</blah></h2>
+    <?php
+    if ($isDown) {
+      echo '<h2 class="ml-1">Some systems are <blah class="orange">down</blah></h2>';
+    } else {
+      echo '<h2 class="ml-1">All systems <blah class="green">operational</blah></h2>';
+    }
+    ?>
   </div>
   <div class="item ">
     <h2 class="mb-0">Uptime <small>Last 90 Days</small></h2>
@@ -97,15 +106,15 @@ if ($services == False || isset($services['error'])) {  echo "Database ded."; di
     <div class="container">
 
       <div class="block mt-1 text-center">
-        <span class="inline">100.00%</span>
+        <span class="inline"><?php echo $percentages['1day']; ?>%</span>
         <p class="mt-0">Last 24 hours</p>
       </div>
       <div class="block mt-1 text-center">
-        <span class="inline">100.00%</span>
+        <span class="inline"><?php echo $percentages['7days']; ?>%</span>
         <p class="mt-0">Last 7 days</p>
       </div>
       <div class="block mt-1 text-center">
-        <span class="inline">100.00%</span>
+        <span class="inline"><?php echo $percentages['30days']; ?>%</span>
         <p class="mt-0">Last 30 days</p>
       </div>
     </div>

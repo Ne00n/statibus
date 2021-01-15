@@ -34,6 +34,9 @@ html {
 }
 
 @media (max-width: 576px) {
+  div .item {
+    flex: 0 100%;
+  }
   div .service {
     flex: 0 100%;
   }
@@ -42,6 +45,8 @@ html {
   }
   div .status {
     flex: 0 100%;
+  }
+  #rstatus {
     display: none;
   }
 }
@@ -140,4 +145,8 @@ small {
 
 .red {
  color: #9b3838;
+}
+
+.orange {
+  color: #9f762c;
 }
