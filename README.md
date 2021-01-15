@@ -4,6 +4,8 @@ Status Page with 60s Ping, Port & HTTP(S) Monitoring.
 
 ![Overview](https://i.imgur.com/MhTiDTg.png)
 
+
+**Key Points**<br />
 - [rqlite](https://github.com/rqlite/rqlite) database
 - PHP 7.3+ (sqlite3,bcmath,curl)
 - Handmade css, no framework, about 2kb
@@ -24,7 +26,7 @@ php cli.php init
 ```
 php cli.php add Server ping 8.8.8.8
 ```
-5. Enable the cronjobs, see => configs/cron|uptime.example
+5. Enable the cronjobs, see => configs/cron|uptime.example<br />
 Run cron every 60s, uptime is for generating the uptime percentages, every 5 minutes is fine
 
 You can access the databse anytime via rest api or ./rqlite
