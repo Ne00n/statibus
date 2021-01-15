@@ -14,9 +14,6 @@ Status Page with 60s Ping, Port & HTTP(S) Monitoring.
 
 QuickSetup:
 
-Beforehand make sure you have a working mailserver running otherwise you need to enable the accounts by hand.<br />
-Also you need curl + mtr installed on all machines.
-
 1. Get a rqlite instance up and running
 2. Rename configs/config.example.php to configs/config.php, you may edit it
 2. To Initialize the databse run:
