@@ -121,12 +121,11 @@ $percentages = $statibus->gimmahDowntimePercentaaages($uptime);
   </div>
 </div>
 
-
-</body>
-
 <footer>
 
 
 </footer>
+
+</body>
 
 </html>
