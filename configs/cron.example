@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /var/www/html/statibus/
+/usr/bin/php cron.php
