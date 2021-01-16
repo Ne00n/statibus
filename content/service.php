@@ -18,11 +18,11 @@ $data = $data['rows'][0];
   <div class="container">
     <div class="item">
       <h2 class="mb-0"><?php echo tools::escape($data['name']); ?></h2>
-      <a href="index.php"><p class="mt-0"><- Back</p></a>
+      <a href="index.php"><p class="mt-0"><- Return</p></a>
     </div>
     <div id="rstatus" class="item text-right">
       <h2 class="mb-0">Service Status</h2>
-      <p class="mt-0">Last update: <?php echo date('d M h:i', $data['lastrun']); ?></p>
+      <p class="mt-0">Last update: <?php echo date('d M H:i', $data['lastrun']); ?></p>
     </div>
     <div class="item box">
       <?php
@@ -34,7 +34,7 @@ $data = $data['rows'][0];
       ?>
     </div>
     <div class="item ">
-      <h2 class="mb-0">Outages <small>Last 90 Days</small></h2>
+      <h2 class="mb-0">Events <small>Last 90 Days</small></h2>
     </div>
     <div class="item">
 
@@ -44,22 +44,24 @@ $data = $data['rows'][0];
 
           <?php
 
-          $outages = $statibus->sql()->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ',True);
+          $outages = $statibus->sql()->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
 
           if (!isset($outages['rows'][0])) {
             echo '<h2 class="text-center">No records.</h2>';
           } else {
             $closed = False;
-            foreach ($outages['rows'] as $row) {
-              if ($row['status'] == 0) { echo '<div class="uptime">'; $closed = False; }
-              if ($row['status'] == 1) {
-                echo '<p class="text-center">Outage from '.date('d M h:i', $outages['rows'][count($outages) -1]['timestamp']).' until '.date('d M h:i', $outages['rows'][count($outages)]['timestamp']).'</p>';
-                echo '</div>'; $closed = True;
+            for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
+              $row = $outages['rows'][$i];
+              if ($row['status'] == 0 && !$closed) {
+                 echo '<div class="container"><div class="service red">Downtime</div><div class="uptime">';
+                 echo '<p class="text-center">since '.date('d M H:i', $outages['rows'][$i]['timestamp']).'</p></div></div>';
+               } elseif ($row['status'] == 0) {
+                 echo '<p class="text-center">'.date('d M h:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div></div>';
+                 $closed = False;
+               } elseif ($row['status'] == 1) {
+                 echo '<div class="container"><div class="service red">Downtime</div><div class="uptime mt-05">';
+                 $closed = True;
               }
-            }
-            if ($outages['rows'][count($outages['rows']) -1]['status'] == 0 && !$closed) {
-              echo '<p class="text-center">Ongoing outage since '.date('d M h:i', $outages['rows'][count($outages) -1]['timestamp']).'</p>';
-              echo '</div>';
             }
           }
 
