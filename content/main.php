@@ -54,7 +54,7 @@ if (isset($services['values'])) {
               $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
               $keys = array_keys($detailed);
               if ($detailed == False || $detailed == "[]") {
-                for ($i = 0; $i <= 89; $i++) {
+                for ($i = 1; $i <= 90; $i++) {
                   echo '<rect class="rnew" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                 }
               } else {
