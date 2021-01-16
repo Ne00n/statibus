@@ -70,7 +70,7 @@ class cron {
       }
     }
     if ($last != 0) { $total = $total + (time() - $last); }
-    return bcmul($total,60,2);
+    return bcdiv($total,60,2);
   }
 
   private function calcUptime($outages) {
