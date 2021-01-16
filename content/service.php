@@ -77,15 +77,15 @@ $data = $data['rows'][0];
       <div class="container">
 
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo tools::escape($data['oneDay']); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($data['oneDay']), 4, '.', '');  ?>%</span>
           <p class="mt-0">Last 24 hours</p>
         </div>
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo tools::escape($data['sevenDays']); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($data['sevenDays']), 4, '.', '');  ?>%</span>
           <p class="mt-0">Last 7 days</p>
         </div>
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo tools::escape($data['thirtyDays']); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($data['thirtyDays']), 4, '.', ''); ?>%</span>
           <p class="mt-0">Last 30 days</p>
         </div>
       </div>
