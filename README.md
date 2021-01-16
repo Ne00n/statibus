@@ -2,7 +2,7 @@
 
 Minimalistic Statuspage with 60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Monitoring.
 
-![Overview](https://i.imgur.com/MhTiDTg.png)
+![Overview](https://i.imgur.com/5ynE6Oo.png)
 
 
 **Key Points**<br />
