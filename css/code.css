@@ -25,6 +25,12 @@ html {
   max-width: 1000px;
 }
 
+@media (max-width: 1115px) {
+  div .statusm {
+    margin-left: 1em;
+  }
+}
+
 @media (min-width: 992px) {
   .container {
       padding-left: 40px;
@@ -47,6 +53,10 @@ html {
   }
   div .block {
     flex: 0 100%;
+  }
+  div .statusm {
+    text-align: right;
+    margin-right: 1em;
   }
   #rstatus {
     display: none;
@@ -143,6 +153,10 @@ html {
  margin-left: 1em;
 }
 
+.statusm {
+ margin-left: 2em;
+}
+
 .mr-1 {
   margin-right: 1em;
 }
@@ -166,11 +180,11 @@ flex: 0 22%;
 }
 
 .uptime {
-  flex: 0 66%;
+  flex: 0 68%;
 }
 
 .status {
-  flex: 0 12%;
+  flex: 0 10%;
 }
 
 .block {
