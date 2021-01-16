@@ -70,8 +70,8 @@ html {
 }
 
 .dot {
-  height: 25px;
-  width: 25px;
+  height: 22px;
+  width: 22px;
   background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
