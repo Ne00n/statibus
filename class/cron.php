@@ -26,7 +26,7 @@ class cron {
           list($ip, $port) = explode(":", $service[4]);
           $fp = fsockopen($ip,$port, $errno, $errstr, $service[5]);
         }
-        $status = (int)$fp;
+        if ($fp) { $status = 1; } else { $status = 0; }
         $this->updateStatus($service[0],$status,$service[2]);
       } elseif ($service[3] == "http") {
         $response = $this->rqlite->fetchData($service[4],"GET",NULL,True,$service[5]);
