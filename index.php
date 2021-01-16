@@ -45,9 +45,9 @@ if (isset($services['values'])) {
     <div class="item box">
       <?php
       if ($isDown) {
-        echo '<h2 class="ml-1">Some systems are <blah class="orange">down</blah></h2>';
+        echo '<h2 class="ml-1"><span class="dot dot-orange"></span> Some systems are <blah class="orange">down</blah></h2>';
       } else {
-        echo '<h2 class="ml-1">All systems <blah class="green">operational</blah></h2>';
+        echo '<h2 class="ml-1"><span class="dot dot-green"></span> All systems <blah class="green">operational</blah></h2>';
       }
       ?>
     </div>

@@ -60,6 +60,58 @@ html {
   box-shadow: 0.2px 0.2px 0.2px rgba(0,0,0,.5);
 }
 
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 rgba(212,160,27, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse-orange {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(212,160,27, 0.4);
+    box-shadow: 0 0 0 0 rgba(212,160,27, 0.4);
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px rgba(212,160,27, 0);
+      box-shadow: 0 0 0 10px rgba(212,160,27, 0);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 rgba(212,160,27, 0);
+      box-shadow: 0 0 0 0 rgba(212,160,27, 0);
+  }
+}
+
+@keyframes pulse-green {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(55,144,86, 0.4);
+    box-shadow: 0 0 0 0 rgba(55,144,86, 0.4);
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px rgba(55,144,86, 0);
+      box-shadow: 0 0 0 10px rgba(55,144,86, 0);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 rgba(55,144,86, 0);
+      box-shadow: 0 0 0 0 rgba(55,144,86, 0);
+  }
+}
+
+.dot-orange {
+  background-color: #d4a01b;
+  box-shadow: 0 0 0 rgba(212,160,27, 0.4);
+  animation: pulse-orange 2s infinite;
+}
+
+.dot-green {
+  background-color: #379056;
+  box-shadow: 0 0 0 rgba(55,144,86, 0.4);
+  animation: pulse-green 2s infinite;
+}
+
 .text-right {
   text-align: right;
 }
@@ -147,7 +199,7 @@ small {
 }
 
 .rorange {
-  fill: #9f762c;
+  fill: #d4a01b;
 }
 
 .green {
@@ -159,7 +211,7 @@ small {
 }
 
 .orange {
-  color: #9f762c;
+  color: #d4a01b;
 }
 
 a {
