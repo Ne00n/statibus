@@ -49,7 +49,7 @@ if (isset($services['values'])) {
             foreach ($services['values'] as $service) {
               echo '<div class="container">';
               $data = tools::getUptimeFromService($service[0],$uptime);
-              echo '<div class="service"><a href="index.php?service='.tools::escape($service[0]).'"><p class="inline">'.$service[1].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($data ? floor(tools::escape($data[5]))."%" : 'n/a').'</span></div>';
+              echo '<div class="service"><a href="index.php?service='.tools::escape($service[0]).'"><p class="inline">'.$service[1].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($data ? number_format((float)tools::escape($data[5]), 2, '.', '')."%" : 'n/a').'</span></div>';
               echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
               $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
               $keys = array_keys($detailed);
