@@ -53,13 +53,13 @@ $data = $data['rows'][0];
             for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
               $row = $outages['rows'][$i];
               if ($row['status'] == 0 && !$closed) {
-                 echo '<div class="container"><div class="service red">Downtime</div><div class="uptime">';
+                 echo '<div class="container"><div class="service red"><p>Downtime</p></div><div class="uptime">';
                  echo '<p class="text-center">since '.date('d M H:i', $outages['rows'][$i]['timestamp']).'</p></div></div>';
                } elseif ($row['status'] == 0) {
                  echo '<p class="text-center">'.date('d M h:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div></div>';
                  $closed = False;
                } elseif ($row['status'] == 1) {
-                 echo '<div class="container"><div class="service red">Downtime</div><div class="uptime mt-05">';
+                 echo '<div class="container"><div class="service red"><p>Downtime</p></div><div class="uptime mt-05">';
                  $closed = True;
               }
             }
