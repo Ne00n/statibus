@@ -70,16 +70,16 @@ class cron {
       }
     }
     if ($last != 0) { $total = $total + (time() - $last); }
-    return round($total / 60);
+    return bcmul($total / 60,2);
   }
 
   private function calcUptime($outages) {
     $response = array();
-    $response[1] = 100 -bcmul( ($this->calcWindow($outages,1) / bcmul(1440 * 1,2) ),100,2);
-    $response[7] = 100 -bcmul( ($this->calcWindow($outages,7) / bcmul(1440 * 7,2) ),100,2);
-    $response[14] = 100 - bcmul( ($this->calcWindow($outages,14) / bcmul(1440 * 14,2) ),100,2);
-    $response[30] = 100 - bcmul( ($this->calcWindow($outages,30) /  bcmul(1440 * 30,2) ),100,2);
-    $response[90] = 100 - bcmul( ($this->calcWindow($outages,90) / bcmul(1440 * 90,2) ),100,2);
+    $response[1] = 100 - bcmul( ($this->calcWindow($outages,1) / (1440 * 1) ),100,2);
+    $response[7] = 100 - bcmul( ($this->calcWindow($outages,7) / (1440 * 7) ),100,2);
+    $response[14] = 100 - bcmul( ($this->calcWindow($outages,14) / (1440 * 14) ),100,2);
+    $response[30] = 100 - bcmul( ($this->calcWindow($outages,30) /  (1440 * 30) ),100,2);
+    $response[90] = 100 - bcmul( ($this->calcWindow($outages,90) / (1440 * 90) ),100,2);
     return $response;
   }
 
