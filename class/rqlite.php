@@ -54,6 +54,8 @@ class rqlite {
     if (!$result) { return $result; }
     $result = $this->insert("CREATE TABLE uptime (serviceID INTEGER NOT NULL PRIMARY KEY, detailed TEXT NOT NULL,oneDay DECIMAL(7,4) NOT NULL, sevenDays DECIMAL(7,4) NOT NULL, fourteenDays DECIMAL(7,4) NOT NULL, thirtyDays DECIMAL(7,4) NOT NULL, ninetyDays DECIMAL(7,4) NOT NULL, FOREIGN KEY(serviceID) REFERENCES services(id))");
     if (!$result) { return $result; }
+    $result = $this->insert("PRAGMA foreign_keys = ON;");
+    if (!$result) { return $result; }
     return $result;
   }
 
