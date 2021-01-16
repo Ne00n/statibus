@@ -32,7 +32,7 @@ html {
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 685px) {
   div .item {
     flex: 0 100%;
   }
@@ -162,15 +162,15 @@ html {
 }
 
 .service {
-  flex: 0 20%;
+flex: 0 22%;
 }
 
 .uptime {
-  flex: 0 70%;
+  flex: 0 66%;
 }
 
 .status {
-  flex: 0 10%;
+  flex: 0 12%;
 }
 
 .block {

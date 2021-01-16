@@ -78,7 +78,7 @@ if (isset($services['values'])) {
                 }
               }
               echo '</svg></div>';
-              echo '<div class="status"><p class="'.($service[2] ? "green" : 'red').' pull-right mr-1">'.($service[2] ? "Up" : 'Down').'</p></div>';
+              echo '<div class="status"><p class="'.($service[2] ? "green" : 'red').' mr-1 text-right">'.($service[2] ? "Online" : 'Offline').'</p></div>';
               echo '</div>';
             }
           } else {
