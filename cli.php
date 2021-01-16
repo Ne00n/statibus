@@ -26,7 +26,7 @@ if (count($argv) == 1) {
     if (!isset($argv[5])) { $argv[5] = 3; }
     if (!isset($argv[6])) { $argv[6] = 200; }
     $response = $rqlite->insert('INSERT INTO services(name,status,method,target,timeout,httpcodes) VALUES("'.$argv[2].'",1,"'.$argv[3].'","'.$argv[4].'","'.$argv[5].'","'.$argv[6].'")');
-    if (isset($response['error']) && $response != False) { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
+    if (isset($response['error']) && $response != False) { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); die(); }
     $response = $rqlite->insert('INSERT INTO uptime(serviceID,detailed,oneDay,sevenDays,fourteenDays,thirtyDays,ninetyDays) VALUES("'.$response["content"]["results"][0]["last_insert_id"].'","W10=","100.00","100.00","100.00","100.00","100.00")');
     if (!isset($response['error']) && $response != False) { print("Success\n"); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
   } elseif ($argv[1] == "delete") {
