@@ -56,7 +56,7 @@ $data = $data['rows'][0];
                  echo '<div class="container"><div class="service red"><p>Downtime</p></div><div class="uptime">';
                  echo '<p class="text-center">since '.date('d M H:i', $outages['rows'][$i]['timestamp']).'</p></div></div>';
                } elseif ($row['status'] == 0) {
-                 echo '<p class="text-center">'.date('d M h:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div></div>';
+                 echo '<p class="text-center">'.date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div></div>';
                  $closed = False;
                } elseif ($row['status'] == 1) {
                  echo '<div class="container"><div class="service red"><p>Downtime</p></div><div class="uptime">';
