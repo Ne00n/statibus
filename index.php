@@ -67,7 +67,7 @@ if (isset($services['values'])) {
               echo '<div class="container">';
               $data = tools::getUptimeFromService($service[0],$uptime);
               echo '<div class="service"><p class="inline">'.$service[1].'</p><span class="green inline pull-right mt-1 mr-1">'.($data ? tools::escape($data[5])."%" : 'n/a').'</span></div>';
-              echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 20">';
+              echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
               $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
               $keys = array_keys($detailed);
               if ($detailed == False || $detailed == "[]") {
