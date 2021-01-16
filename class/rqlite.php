@@ -68,12 +68,23 @@ class rqlite {
     return $this->insert($input);
   }
 
-  public function select($input) {
+  public function select($input,$tables=False) {
     $command = SQLite3::escapeString($input);
     $command = urlencode($command);
     $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/query?level=none&pretty&timings&q='.$command);
     if (!$result) { return $result; }
-    if (isset($result['error'])) { return $result; } else { return $result['content']['results'][0]; }
+    if (isset($result['error'])) { return $result; } else {
+      if ($tables) {
+        $response = array();
+        foreach ($result['content']['results'] as $result) {
+          foreach ($result['values'] as $row) {
+            $response['rows'][] = array_combine($result['columns'],$row);
+          }
+        }
+        return $response;
+      }
+      return $result['content']['results'][0];
+    }
   }
 
   public function delete($input) {
