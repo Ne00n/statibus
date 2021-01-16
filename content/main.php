@@ -99,15 +99,15 @@ if (isset($services['values'])) {
       <div class="container">
 
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo tools::escape($percentages['1day']); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($percentages['1day']), 2, '.', ''); ?>%</span>
           <p class="mt-0">Last 24 hours</p>
         </div>
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo tools::escape($percentages['7days']); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($percentages['7days']), 2, '.', ''); ?>%</span>
           <p class="mt-0">Last 7 days</p>
         </div>
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo tools::escape($percentages['30days']); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($percentages['30days']), 2, '.', ''); ?>%</span>
           <p class="mt-0">Last 30 days</p>
         </div>
       </div>
