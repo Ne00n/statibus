@@ -77,8 +77,10 @@ class rqlite {
       if ($tables) {
         $response = array();
         foreach ($result['content']['results'] as $result) {
-          foreach ($result['values'] as $row) {
-            $response['rows'][] = array_combine($result['columns'],$row);
+          if (isset($result['values'] )) {
+            foreach ($result['values'] as $row) {
+              $response['rows'][] = array_combine($result['columns'],$row);
+            }
           }
         }
         return $response;
