@@ -64,7 +64,11 @@ class cron {
   }
 
   private function calcWindow($outages,$window=1) {
-    $line = time() - (86400 * $window); $last = 0; $total = 0;
+    if ($window == 1) {
+      $line = strtotime('today');
+    } else {
+      $line = time() - (86400 * $window); $last = 0; $total = 0;
+    }
     for ($i = 0; $i <= count($outages['values']) -1; $i++) {
       $row = $outages['values'][$i];
       if ($row[3] > $line) {
