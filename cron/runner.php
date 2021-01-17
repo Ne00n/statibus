@@ -5,8 +5,6 @@
 if (php_sapi_name() != 'cli') { exit(); }
 
 $options = getopt("i:");
-
-if (php_sapi_name() != 'cli') { exit(); }
 include 'configs/config.php';
 
 function dat_loader($class) {
