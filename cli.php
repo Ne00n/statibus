@@ -12,7 +12,7 @@ spl_autoload_register('dat_loader');
 $rqlite = new rqlite(_rqliteIP,_rqlitePort);
 
 if (count($argv) == 1) {
-  print("add <name> <ping,port,http> <ip,ip:port,url>\n");
+  print("add <name> <method> <target> <timeout> <httpcode(s)>\n");
   print("delete <id>\n");
   print("list\n");
 } else {
