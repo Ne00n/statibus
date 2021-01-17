@@ -19,9 +19,11 @@ if (count($argv) == 1) {
   if ($argv[1] == "init") {
     $response = $rqlite->init();
   } elseif ($argv[1] == "list") {
-    print("Loading...\n");
-    $response = $rqlite->select('SELECT * FROM services');
-    if (!isset($response['error']) && $response != False ) { var_dump($response['values']); } else { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
+    $response = $rqlite->select('SELECT * FROM services',True);
+    if (!isset($response['rows'])) { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
+    $keys = array_keys($response['rows']['0']);
+    foreach ($keys as $key) { echo "|  ".$key."  "; } echo "\n";
+    foreach ($response['rows'] as $row) { foreach ($row as $element) { echo " ".$element." "; } echo "\n"; }
   } elseif ($argv[1] == "add") {
     if (!isset($argv[5])) { $argv[5] = 3; }
     if (!isset($argv[6])) { $argv[6] = 200; }
