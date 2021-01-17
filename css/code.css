@@ -14,6 +14,10 @@ html {
   color: white;
 }
 
+.footer {
+  flex: 0;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;

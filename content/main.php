@@ -112,11 +112,3 @@ if (isset($data['rows'])) {
     </div>
 
   </div>
-
-<footer>
-
-</footer>
-
-</body>
-
-</html>

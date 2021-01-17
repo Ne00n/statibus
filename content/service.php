@@ -95,11 +95,3 @@ $data = $data['rows'][0];
     </div>
 
   </div>
-
-<footer>
-
-</footer>
-
-</body>
-
-</html>
