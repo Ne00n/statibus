@@ -60,7 +60,8 @@ $data = $data['rows'][0];
                  echo '<p class="text-center">'.date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div><div class="block text-center">'.tools::escape($diff).'m</div></div>';
                  $closed = False;
                } elseif ($row['status'] == 1) {
-                 echo '<div class="container"><div class="block red"><p>Downtime</p></div><div class="block">';
+                 echo '<div class="container"><div class="block '.($outages['rows'][$i +1]['flag'] != NULL ? 'orange"><p>Uplink died' : 'red"><p>Downtime');
+                 echo '</p></div><div class="block">';
                  $closed = True;
               }
             }

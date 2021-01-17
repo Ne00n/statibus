@@ -99,7 +99,7 @@ class cron {
   public function uptime() {
     $uptime = $this->rqlite->select('SELECT * FROM uptime');
     foreach ($uptime['values'] as $row) {
-      $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID = '.$row[0].' ');
+      $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID = '.$row[0].' AND flag is null ');
       if (!isset($outages['values'])) {
         $response = $this->generateDetailed($row,NULL);
         $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$response['detailed'].'", oneDay = 100.00,sevenDays = 100.00,fourteenDays = 100.00,thirtyDays = 100.00,ninetyDays = 100.00 WHERE serviceID = '.$row[0].' ');
@@ -108,6 +108,34 @@ class cron {
         $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$response['detailed'].'", oneDay = '.$response['data'][1].',sevenDays = '.$response['data'][7].',fourteenDays = '.$response['data'][14].',thirtyDays = '.$response['data'][30].',ninetyDays = '.$response['data'][90].' WHERE serviceID = '.$row[0].' ');
       }
     }
+  }
+
+  public function findFalsePositives() {
+    $uptime = $this->rqlite->select('SELECT * FROM uptime',True);
+    #Check entries within 24 hours
+    $line = time() - 86400;
+    $outages = $this->rqlite->select('SELECT * FROM outages WHERE timestamp > '.$line.' AND status = 0',True);
+    if (isset($outages['rows'])) {
+      foreach ($outages['rows'] as $row) {
+        $start = $row['timestamp'] -5; $end = $row['timestamp'] + 5;
+        $matches = $this->searchScope($start,$end,$outages);
+        foreach ($matches as $key => $match) {
+          if ( $match / count($uptime['rows']) * 100 > 50) {
+            $this->rqlite->update('UPDATE outages SET flag = 1 WHERE timestamp = '.$key);
+          }
+        }
+      }
+    }
+  }
+
+  private function searchScope($start,$end,$outages) {
+    $response = array();
+    foreach ($outages['rows'] as $row) {
+      if ($row['timestamp'] > $start && $row['timestamp'] < $end) {
+        if (!isset($response[$row['timestamp']])) { $response[$row['timestamp']] = 1; } else { $response[$row['timestamp']]++; }
+      }
+    }
+    return $response;
   }
 
 }

@@ -12,6 +12,7 @@ function dat_loader($class) {
 spl_autoload_register('dat_loader');
 
 $Cron = new cron(_rqliteIP,_rqlitePort);
+$Cron->findFalsePositives();
 $Cron->uptime();
 
 ?>
