@@ -8,7 +8,7 @@ $serviceID = $_GET["service"];
 $statibus = new statibus(_rqliteIP,_rqlitePort);
 $data = $statibus->sql()->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id WHERE services.id='.$serviceID.' ',True);
 
-if ($data == False || isset($data['error'])) {  echo "Database ded."; die(); }
+if ($data == False || isset($data['error'])) {  echo "Invalid service."; die(); }
 if (!isset($data['rows'][0])) { echo "Invalid service."; die(); }
 $data = $data['rows'][0];
 
