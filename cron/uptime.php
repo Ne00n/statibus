@@ -1,5 +1,7 @@
 <?php
 
+#Run this file every 5m
+
 if (php_sapi_name() != 'cli') { exit(); }
 include 'configs/config.php';
 

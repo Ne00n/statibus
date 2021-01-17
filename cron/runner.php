@@ -1,5 +1,7 @@
 <?php
 
+#Do NOT add this file to any cronjob
+
 if (php_sapi_name() != 'cli') { exit(); }
 
 $options = getopt("i:");

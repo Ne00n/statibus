@@ -1,5 +1,7 @@
 <?php
 
+#Run this file every 60s or even 30s via cron
+
 if (php_sapi_name() != 'cli') { exit(); }
 include 'configs/config.php';
 
