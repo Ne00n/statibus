@@ -1,17 +1,16 @@
 <?php
 
 $statibus = new statibus(_rqliteIP,_rqlitePort);
-$services = $statibus->sql()->select('SELECT * FROM services');
-$uptime = $statibus->sql()->select('SELECT * FROM uptime');
-if ($services == False || isset($services['error'])) {  echo "Database ded."; die(); }
+$data = $statibus->sql()->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id',True);
+if ($data === False || isset($data['error'])) {  echo "Database ded."; die(); }
 
-$isDown = $statibus->isDownTimeHuh($services);
-$percentages = $statibus->gimmahDowntimePercentaaages($uptime);
+$isDown = $statibus->isDownTimeHuh($data);
+$percentages = $statibus->gimmahDowntimePercentaaages($data);
 
-if (isset($services['values'])) {
-  $lastrun = $services['values'][count($services['values']) -1][7];
+if (isset($data['rows'])) {
+  $lastrun = $data['rows'][count($data['rows']) -1]['lastrun'];
 } else {
-  $lastrun = "n/a";
+  $lastrun = 0;
 }
 
 ?>
@@ -45,13 +44,12 @@ if (isset($services['values'])) {
 
           <?php
 
-          if (isset($services['values'])) {
-            foreach ($services['values'] as $service) {
+          if (isset($data['rows'])) {
+            foreach ($data['rows'] as $row) {
               echo '<div class="container">';
-              $data = tools::getUptimeFromService($service[0],$uptime);
-              echo '<div class="service"><a href="index.php?service='.tools::escape($service[0]).'"><p class="inline">'.$service[1].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($data ? number_format(floor($data[5]*100)/100, 2)."%" : 'n/a').'</span></div>';
+              echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline">'.$row['name'].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2)."%" : 'n/a').'</span></div>';
               echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
-              $detailed = json_decode(base64_decode($data[1]),True); $spacing = 7;
+              $detailed = json_decode(base64_decode($row['detailed']),True); $spacing = 7;
               $keys = array_keys($detailed);
               if ($detailed == False || $detailed == "[]") {
                 for ($i = 1; $i <= 90; $i++) {
@@ -78,7 +76,7 @@ if (isset($services['values'])) {
                 }
               }
               echo '</svg></div>';
-              echo '<div class="status"><p class="'.($service[2] ? "green" : 'red').' statusm">'.($service[2] ? "Online" : 'Offline').'</p></div>';
+              echo '<div class="status"><p class="'.($row['status'] ? "green" : 'red').' statusm">'.($row['status'] ? "Online" : 'Offline').'</p></div>';
               echo '</div>';
             }
           } else {
@@ -99,26 +97,18 @@ if (isset($services['values'])) {
       <div class="container">
 
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo number_format((float)tools::escape($percentages['1day']), 2, '.', ''); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($percentages['oneDay']), 2, '.', ''); ?>%</span>
           <p class="mt-0">Last 24 hours</p>
         </div>
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo number_format((float)tools::escape($percentages['7days']), 2, '.', ''); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($percentages['sevenDays']), 2, '.', ''); ?>%</span>
           <p class="mt-0">Last 7 days</p>
         </div>
         <div class="block mt-1 text-center">
-          <span class="inline"><?php echo number_format((float)tools::escape($percentages['30days']), 2, '.', ''); ?>%</span>
+          <span class="inline"><?php echo number_format((float)tools::escape($percentages['thirtyDays']), 2, '.', ''); ?>%</span>
           <p class="mt-0">Last 30 days</p>
         </div>
       </div>
     </div>
 
   </div>
-
-<footer>
-
-</footer>
-
-</body>
-
-</html>

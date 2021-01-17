@@ -10,35 +10,45 @@ class cron {
   }
 
   public function run() {
-    $services = $this->rqlite->select('SELECT * FROM services');
-    $this->uptime = $this->rqlite->select('SELECT * FROM uptime');
-    foreach ($services['values'] as $service) {
-      print("Checking ".$service[4]."\n");
-      if ($service[3] == "ping") {
-        exec("ping -c 3 " . $service[4], $output, $result);
-        if ($result == 0) { $status = 1; } else { $status = 0; }
-        $this->updateStatus($service[0],$status,$service[2]);
-      } elseif ($service[3] == "port") {
-        if (filter_var($service[4], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-          list($ip, $port) = explode("]:", $service[4]);
-          $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $service[5]);
-        } else {
-          list($ip, $port) = explode(":", $service[4]);
-          $fp = fsockopen($ip,$port, $errno, $errstr, $service[5]);
-        }
-        if ($fp) { $status = 1; } else { $status = 0; }
-        $this->updateStatus($service[0],$status,$service[2]);
-      } elseif ($service[3] == "http") {
-        $response = $this->rqlite->fetchData($service[4],"GET",NULL,True,$service[5]);
-        if (strpos($service[6], ',') !== false) {  $statusCodes = explode( ',', $service[6]); } else { $statusCodes = array($service[6]); }
-        if (in_array($response['http'], $statusCodes)) { $status = 1; } else { $status = 0; }
-        $this->updateStatus($service[0],$status,$service[2]);
+    $services = $this->rqlite->select('SELECT * FROM services',True);
+    if (isset($services['rows'][0])) {
+      foreach ($services['rows'] as $row) {
+        echo "Running /usr/bin/php cron/runner.php -i ".$row['id']."\n";
+        backgroundProcess::startProcess("/usr/bin/php cron/runner.php -i ".$row['id']);
       }
     }
   }
 
+  public function check($options) {
+    $data = $this->rqlite->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id WHERE services.id='.$options['i'].' ',True);
+    if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
+    $data = $data['rows'][0];
+    print("Checking ".$data['id']."\n");
+    if ($data['method'] == "ping") {
+      exec("ping -c 3 " . $data['target'], $output, $result);
+      if ($result == 0) { $status = 1; } else { $status = 0; }
+      $this->updateStatus($data['id'],$status,$data['status']);
+    } elseif ($data['method'] == "port") {
+      if (filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        list($ip, $port) = explode("]:", $data['target']);
+        $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $service[5]);
+      } else {
+        list($ip, $port) = explode(":", $data['target']);
+        $fp = fsockopen($ip,$port, $errno, $errstr, $data['timeout']);
+      }
+      if ($fp) { $status = 1; } else { $status = 0; }
+      $this->updateStatus($data['id'],$status,$data['status']);
+    } elseif ($data['method'] == "http") {
+      $response = $this->rqlite->fetchData($data['target'],"GET",NULL,True,$data['timeout']);
+      if (strpos($data['httpcodes'], ',') !== false) {  $statusCodes = explode( ',', $data['httpcodes']); } else { $statusCodes = array($data['httpcodes']); }
+      if (in_array($response['http'], $statusCodes)) { $status = 1; } else { $status = 0; }
+      $this->updateStatus($data['id'],$status,$data['status']);
+    } else {
+      echo "Method not supported.\n";
+    }
+  }
+
   private function updateStatus($id,$current,$oldState) {
-    $this->updateUptime($id);
     if ($current == 0 && $oldState == 1) {
       print($id." went offline\n");
       $this->rqlite->insert('INSERT INTO outages (serviceID,status,timestamp) VALUES("'.$id.'",0,'.time().')');
@@ -53,15 +63,10 @@ class cron {
     }
   }
 
-  private function updateUptime($id) {
-    $data = tools::getUptimeFromService($id,$this->uptime);
-    if ($data == False) {
-      $this->rqlite->insert('INSERT INTO uptime(serviceID,detailed,oneDay,sevenDays,fourteenDays,thirtyDays,ninetyDays) VALUES("'.$id.'","W10=","100.00","100.00","100.00","100.00","100.00")');
-    }
-  }
-
   private function calcWindow($outages,$window=1) {
-    $line = time() - (86400 * $window); $last = 0; $total = 0;
+    $last = 0; $total = 0;
+    #If the selected window is 1 = 24h, downtimes will be only count from midnight
+    if ($window == 1) { $line = strtotime('today'); } else { $line = time() - (86400 * $window); }
     for ($i = 0; $i <= count($outages['values']) -1; $i++) {
       $row = $outages['values'][$i];
       if ($row[3] > $line) {
@@ -94,7 +99,7 @@ class cron {
   public function uptime() {
     $uptime = $this->rqlite->select('SELECT * FROM uptime');
     foreach ($uptime['values'] as $row) {
-      $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID = '.$row[0].' ');
+      $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID = '.$row[0].' AND flag is null ');
       if (!isset($outages['values'])) {
         $response = $this->generateDetailed($row,NULL);
         $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$response['detailed'].'", oneDay = 100.00,sevenDays = 100.00,fourteenDays = 100.00,thirtyDays = 100.00,ninetyDays = 100.00 WHERE serviceID = '.$row[0].' ');
@@ -103,6 +108,34 @@ class cron {
         $response = $this->rqlite->update('UPDATE uptime SET detailed = "'.$response['detailed'].'", oneDay = '.$response['data'][1].',sevenDays = '.$response['data'][7].',fourteenDays = '.$response['data'][14].',thirtyDays = '.$response['data'][30].',ninetyDays = '.$response['data'][90].' WHERE serviceID = '.$row[0].' ');
       }
     }
+  }
+
+  public function findFalsePositives() {
+    $uptime = $this->rqlite->select('SELECT * FROM uptime',True);
+    #Check entries within 24 hours
+    $line = time() - 86400;
+    $outages = $this->rqlite->select('SELECT * FROM outages WHERE timestamp > '.$line.' AND status = 0',True);
+    if (isset($outages['rows'])) {
+      foreach ($outages['rows'] as $row) {
+        $start = $row['timestamp'] -5; $end = $row['timestamp'] + 5;
+        $matches = $this->searchScope($start,$end,$outages);
+        foreach ($matches as $key => $match) {
+          if ( $match / count($uptime['rows']) * 100 > 50) {
+            $this->rqlite->update('UPDATE outages SET flag = 1 WHERE timestamp = '.$key);
+          }
+        }
+      }
+    }
+  }
+
+  private function searchScope($start,$end,$outages) {
+    $response = array();
+    foreach ($outages['rows'] as $row) {
+      if ($row['timestamp'] > $start && $row['timestamp'] < $end) {
+        if (!isset($response[$row['timestamp']])) { $response[$row['timestamp']] = 1; } else { $response[$row['timestamp']]++; }
+      }
+    }
+    return $response;
   }
 
 }

@@ -8,7 +8,7 @@ $serviceID = $_GET["service"];
 $statibus = new statibus(_rqliteIP,_rqlitePort);
 $data = $statibus->sql()->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id WHERE services.id='.$serviceID.' ',True);
 
-if ($data == False || isset($data['error'])) {  echo "Database ded."; die(); }
+if ($data == False || isset($data['error'])) {  echo "Invalid service."; die(); }
 if (!isset($data['rows'][0])) { echo "Invalid service."; die(); }
 $data = $data['rows'][0];
 
@@ -53,13 +53,15 @@ $data = $data['rows'][0];
             for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
               $row = $outages['rows'][$i];
               if ($row['status'] == 0 && !$closed) {
-                 echo '<div class="container"><div class="service red"><p>Downtime</p></div><div class="uptime">';
-                 echo '<p class="text-center">since '.date('d M H:i', $outages['rows'][$i]['timestamp']).'</p></div></div>';
+                 echo '<div class="container"><div class="block red"><p>Downtime</p></div><div class="block">';
+                 echo '<p class="text-center">since '.date('d M H:i', $outages['rows'][$i]['timestamp']).'</p></div><div class="block text-center">ongoing</div></div>';
                } elseif ($row['status'] == 0) {
-                 echo '<p class="text-center">'.date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div></div>';
+                 $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
+                 echo '<p class="text-center">'.date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div><div class="block text-center">'.tools::escape($diff).'m</div></div>';
                  $closed = False;
                } elseif ($row['status'] == 1) {
-                 echo '<div class="container"><div class="service red"><p>Downtime</p></div><div class="uptime">';
+                 echo '<div class="container"><div class="block '.($outages['rows'][$i +1]['flag'] != NULL ? 'orange"><p>Uplink died' : 'red"><p>Downtime');
+                 echo '</p></div><div class="block">';
                  $closed = True;
               }
             }
@@ -94,11 +96,3 @@ $data = $data['rows'][0];
     </div>
 
   </div>
-
-<footer>
-
-</footer>
-
-</body>
-
-</html>

@@ -16,4 +16,6 @@ if (isset($_GET["service"])) {
   include 'content/main.php';
 }
 
+include 'content/footer.html';
+
 ?>

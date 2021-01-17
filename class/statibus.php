@@ -8,29 +8,29 @@ class statibus {
     $this->rqlite = new rqlite($rqliteIP,$rqlitePort);
   }
 
-  public function isDownTimeHuh($services) {
-    if (isset($services['values'])) {
-      foreach ($services['values'] as $service) {
-        if ($service[2] == 0) { return True; }
+  public function isDownTimeHuh($data) {
+    if (isset($data['rows'])) {
+      foreach ($data['rows'] as $row) {
+        if ($row['status'] == 0) { return True; }
       }
     }
     return False;
   }
 
-  public function gimmahDowntimePercentaaages($uptime) {
-    $response = array('1day' => 0,'7days' => 0,'30days' => 0);
-    if (isset($uptime['values'])) {
-      foreach ($uptime['values'] as $row) {
-        $response['1day'] += $row[2];
-        $response['7days'] += $row[3];
-        $response['30days'] += $row[5];
+  public function gimmahDowntimePercentaaages($data) {
+    $response = array('oneDay' => 0,'sevenDays' => 0,'thirtyDays' => 0);
+    if (isset($data['rows'])) {
+      foreach ($data['rows'] as $row) {
+        $response['oneDay'] += $row['oneDay'];
+        $response['sevenDays'] += $row['sevenDays'];
+        $response['thirtyDays'] += $row['thirtyDays'];
       }
     } else {
-      return array('1day' => 100,'7days' => 100,'30days' => 100);
+      return array('oneDay' => 100,'sevenDays' => 100,'thirtyDays' => 100);
     }
-    $response['1day'] = round($response['1day'] / count($uptime['values']),2);
-    $response['7days'] = round($response['7days'] / count($uptime['values']),2);
-    $response['30days'] = round($response['30days'] / count($uptime['values']),2);
+    $response['oneDay'] = round($response['oneDay'] / count($data['rows']),2);
+    $response['sevenDays'] = round($response['sevenDays'] / count($data['rows']),2);
+    $response['thirtyDays'] = round($response['thirtyDays'] / count($data['rows']),2);
     return $response;
   }
 

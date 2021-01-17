@@ -1,8 +1,10 @@
 <?php
 
-#Run this file every 5m
+#Do NOT add this file to any cronjob
 
 if (php_sapi_name() != 'cli') { exit(); }
+
+$options = getopt("i:");
 include 'configs/config.php';
 
 function dat_loader($class) {
@@ -12,7 +14,6 @@ function dat_loader($class) {
 spl_autoload_register('dat_loader');
 
 $Cron = new cron(_rqliteIP,_rqlitePort);
-$Cron->findFalsePositives();
-$Cron->uptime();
+$Cron->check($options);
 
 ?>
