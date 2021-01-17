@@ -20,6 +20,7 @@ if (count($argv) == 1) {
     $response = $rqlite->init();
   } elseif ($argv[1] == "list") {
     $response = $rqlite->select('SELECT * FROM services',True);
+    if (empty($response)) { echo "No services added.\n"; die(); }
     if (!isset($response['rows'])) { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); }
     $keys = array_keys($response['rows']['0']);
     foreach ($keys as $key) { echo "|  ".$key."  "; } echo "\n";
