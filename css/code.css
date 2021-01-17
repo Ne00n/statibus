@@ -14,8 +14,14 @@ html {
   color: white;
 }
 
+body {
+  min-height: 98vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .footer {
-  flex: 0;
+  margin-top: auto;
 }
 
 .container {
