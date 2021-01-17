@@ -65,11 +65,8 @@ class cron {
 
   private function calcWindow($outages,$window=1) {
     $last = 0; $total = 0;
-    if ($window == 1) {
-      $line = strtotime('today');
-    } else {
-      $line = time() - (86400 * $window);
-    }
+    #If the selected window is 1 = 24h, downtimes will be only count from midnight
+    if ($window == 1) { $line = strtotime('today'); } else { $line = time() - (86400 * $window); }
     for ($i = 0; $i <= count($outages['values']) -1; $i++) {
       $row = $outages['values'][$i];
       if ($row[3] > $line) {
