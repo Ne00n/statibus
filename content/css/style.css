@@ -205,36 +205,27 @@ small {
   font-size: small;
 }
 
-.rgreen {
-  fill: #379056;
-}
-
-.rgreendark {
-  fill: #27633c;
-}
-
-.rred {
-  fill: #9b3838;
-}
-
-.rnew {
+.new {
   fill: #525d56;
-}
-
-.rorange {
-  fill: #d4a01b;
 }
 
 .green {
  color: #379056;
+ fill: #379056;
+}
+
+.darkgreen {
+  fill: #27633c;
 }
 
 .red {
  color: #9b3838;
+ fill: #9b3838;
 }
 
 .orange {
   color: #d4a01b;
+  fill: #d4a01b;
 }
 
 a {
