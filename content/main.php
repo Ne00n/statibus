@@ -1,7 +1,9 @@
 <?php
 
 $statibus = new statibus(_rqliteIP,_rqlitePort);
-$data = $statibus->sql()->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id',True);
+$data = $statibus->sql()->select('SELECT s.ID,s.name,g.name as gname,s.status,s.lastrun,g.id as gid,u.detailed,u.oneDay,u.sevenDays,u.thirtyDays,u.ninetyDays
+FROM services as s JOIN uptime as u ON u.serviceID=s.id JOIN groups as g ON g.id=s.groupID ORDER BY g.id',True);
+
 if ($data === False || isset($data['error'])) {  echo "Database ded."; die(); }
 
 $isDown = $statibus->isDownTimeHuh($data);
@@ -33,60 +35,62 @@ if (isset($data['rows'])) {
       }
       ?>
     </div>
-    <div class="item ">
-      <h2 class="mb-0">Uptime <small>Last 90 Days</small></h2>
-    </div>
-    <div class="item">
+    <?php
 
-    </div>
-    <div class="item box">
-      <div class="services">
+    if (isset($data['rows'])) {
+      $lastGroup = "";
+      foreach ($data['rows'] as $row) {
 
-          <?php
+        if ($lastGroup != $row['gname']) {
+          if ($lastGroup != "") { echo '</div></div>'; }
+          echo '<div class="item "><h2 class="mb-0">'.tools::escape($row['gname']).' <small>Last 90 Days of Uptime</small></h2></div>';
+          echo '<div class="item"></div>';
+          echo '<div class="item box"><div class="services">';
+          $lastGroup = $row['gname'];
+        }
 
-          if (isset($data['rows'])) {
-            foreach ($data['rows'] as $row) {
-              echo '<div class="container">';
-              echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline">'.$row['name'].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2)."%" : 'n/a').'</span></div>';
-              echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
-              $detailed = json_decode(base64_decode($row['detailed']),True); $spacing = 7;
-              $keys = array_keys($detailed);
-              if ($detailed == False || $detailed == "[]") {
-                for ($i = 1; $i <= 90; $i++) {
-                  echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-                }
-              } else {
-                for ($i = 90; $i > 0; $i = $i -1) {
-                  $negate = 91 - count($detailed);
-                  if ($negate <= $i) {
-                    $selector = $i - $negate;
-                    $percentage = $detailed[$keys[$selector]];
-                    if ($percentage == 100) {
-                      echo '<rect class="green" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-                    } elseif ($percentage < 100 && $percentage > 99) {
-                       echo '<rect class="darkgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-                    } elseif ($percentage < 99 && $percentage > 97) {
-                      echo '<rect class="orange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-                    } else {
-                      echo '<rect class="red" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-                    }
-                  } else {
-                    echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-                  }
-                }
-              }
-              echo '</svg></div>';
-              echo '<div class="status"><p class="'.($row['status'] ? "green" : 'red').' statusm">'.($row['status'] ? "Online" : 'Offline').'</p></div>';
-              echo '</div>';
-            }
-          } else {
-            echo '<h2 class="text-center">No services added.</h2>';
+        echo '<div class="container">';
+        echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline">'.$row['name'].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2)."%" : 'n/a').'</span></div>';
+        echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
+        $detailed = json_decode(base64_decode($row['detailed']),True); $spacing = 7;
+        $keys = array_keys($detailed);
+        if ($detailed == False || $detailed == "[]") {
+          for ($i = 1; $i <= 90; $i++) {
+            echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
           }
+        } else {
+          for ($i = 90; $i > 0; $i = $i -1) {
+            $negate = 91 - count($detailed);
+            if ($negate <= $i) {
+              $selector = $i - $negate;
+              $percentage = $detailed[$keys[$selector]];
+              if ($percentage == 100) {
+                echo '<rect class="green" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+              } elseif ($percentage < 100 && $percentage > 99) {
+                 echo '<rect class="darkgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+              } elseif ($percentage < 99 && $percentage > 97) {
+                echo '<rect class="orange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+              } else {
+                echo '<rect class="red" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+              }
+            } else {
+              echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+            }
+          }
+        }
 
-          ?>
+        echo '</svg></div>';
+        echo '<div class="status"><p class="'.($row['status'] ? "green" : 'red').' statusm">'.($row['status'] ? "Online" : 'Offline').'</p></div>';
+        echo '</div>';
 
-      </div>
-    </div>
+      }
+      echo '</div></div>';
+    } else {
+      echo '<h2 class="text-center">No services added.</h2>';
+    }
+
+    ?>
+
     <div class="item ">
       <h2 class="mb-0">Overall Uptime</h2>
     </div>
