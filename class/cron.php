@@ -20,7 +20,7 @@ class cron {
   }
 
   public function check($options) {
-    $data = $this->rqlite->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id WHERE services.id='.$options['i'].' ',True);
+    $data = $this->rqlite->select('SELECT * FROM services WHERE id='.$options['i'].' ',True);
     if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
     $data = $data['rows'][0];
     print("Checking ".$data['id']."\n");
