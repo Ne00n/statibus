@@ -1,3 +1,4 @@
 CREATE TABLE groups (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL)
 INSERT INTO groups (name) VALUES("Servers")
-ALTER TABLE services ADD groupID NOT NULL 1 REFERENCES groups(id)
+ALTER TABLE services ADD groupID INTEGER REFERENCES groups(id)
+UPDATE services SET groupID = 1
