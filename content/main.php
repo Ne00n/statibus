@@ -53,7 +53,7 @@ if (isset($data['rows'])) {
               $keys = array_keys($detailed);
               if ($detailed == False || $detailed == "[]") {
                 for ($i = 1; $i <= 90; $i++) {
-                  echo '<rect class="rnew" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                  echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                 }
               } else {
                 for ($i = 90; $i > 0; $i = $i -1) {
@@ -62,16 +62,16 @@ if (isset($data['rows'])) {
                     $selector = $i - $negate;
                     $percentage = $detailed[$keys[$selector]];
                     if ($percentage == 100) {
-                      echo '<rect class="rgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                      echo '<rect class="green" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                     } elseif ($percentage < 100 && $percentage > 99) {
-                       echo '<rect class="rgreendark" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                       echo '<rect class="darkgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                     } elseif ($percentage < 99 && $percentage > 97) {
-                      echo '<rect class="rorange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                      echo '<rect class="orange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                     } else {
-                      echo '<rect class="rred" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                      echo '<rect class="red" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                     }
                   } else {
-                    echo '<rect class="rnew" height="18" width="5" x="'.$i*$spacing.'"></rect>';
+                    echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
                   }
                 }
               }
