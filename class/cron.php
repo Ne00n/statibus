@@ -41,7 +41,13 @@ class cron {
     } elseif ($data['method'] == "http") {
       $response = $this->rqlite->fetchData($data['target'],"GET",NULL,True,$data['timeout']);
       if (strpos($data['httpcodes'], ',') !== false) {  $statusCodes = explode( ',', $data['httpcodes']); } else { $statusCodes = array($data['httpcodes']); }
-      if (in_array($response['http'], $statusCodes)) { $status = 1; } else { $status = 0; }
+      if (in_array($response['http'], $statusCodes) && $data['keyword'] == "") {
+        $status = 1;
+      } elseif (in_array($response['http'], $statusCodes) && strpos($response['content'], $data['keyword']) !== false) {
+        $status = 1;
+      } else {
+        $status = 0;
+      }
       $this->updateStatus($data['id'],$status,$data['status']);
     } else {
       echo "Method not supported.\n";
