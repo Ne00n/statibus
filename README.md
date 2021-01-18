@@ -64,5 +64,5 @@ php cli.php group list
 ```
 - delete
 ```
-php cli.php delete 1
+php cli.php group delete 1
 ```
