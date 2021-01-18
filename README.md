@@ -30,7 +30,7 @@ php cli.php service add 1 Server ping 8.8.8.8
 5. Enable the cronjobs, see => configs/cron|uptime.example<br />
 Run cron every 60s, uptime is for generating the uptime percentages, every 5 minutes is fine
 
-You can access the databse anytime via rest api or ./rqlite
+**You can access the databse anytime via ./rqlite in case the commands are not enough.**
 
 **service**<br />
 - add
