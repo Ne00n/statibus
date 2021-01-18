@@ -32,6 +32,7 @@ Run cron every 60s, uptime is for generating the uptime percentages, every 5 min
 
 **You can access the databse anytime via ./rqlite in case the commands are not enough.**
 
+## CLI
 **service**<br />
 - add
 ```
