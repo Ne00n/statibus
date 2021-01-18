@@ -14,7 +14,7 @@ Minimalistic Statuspage with 30,60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Mo
 **ToDo**<br />
 - external checks
 
-QuickSetup:
+##QuickSetup:
 
 1. Get a rqlite instance up and running
 2. Rename configs/config.example.php to configs/config.php, you may edit it
