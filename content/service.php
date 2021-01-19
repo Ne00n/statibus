@@ -40,36 +40,32 @@ $data = $data['rows'][0];
 
     </div>
     <div class="item box">
-      <div class="services">
+    <?php
 
-          <?php
+    $outages = $statibus->getOutagesArray($serviceID);
 
-          $outages = $statibus->sql()->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
+    if (empty($outages)) {
+      echo '<h2 class="text-center">No records.</h2>';
+    } else {
+      foreach ($outages as $outage) {
+        echo '<div class="container">';
+        if ($outage['header'] == 'Downtime') {
+          echo '<div class="block red"><p>Downtime</p></div>';
+        } else {
+          echo '<div class="block orange"><p>Origin Network issue</p></div>';
+        }
+        echo '<div class="block"><p class="text-center">since '.$outage['message'].'</p></div>';
+        if ($outage['downtime'] == 'ongoing') {
+          echo '<div class="block text-center">ongoing</div>';
+        } else {
+          echo '<div class="block"><p class="text-center">'.$outage['downtime'].'m</p></div>';
+        }
+        echo '</div>';
+      }
+    }
 
-          if (!isset($outages['rows'][0])) {
-            echo '<h2 class="text-center">No records.</h2>';
-          } else {
-            $closed = False;
-            for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
-              $row = $outages['rows'][$i];
-              if ($row['status'] == 0 && !$closed) {
-                 echo '<div class="container"><div class="block red"><p>Downtime</p></div><div class="block">';
-                 echo '<p class="text-center">since '.date('d M H:i', $outages['rows'][$i]['timestamp']).'</p></div><div class="block text-center">ongoing</div></div>';
-               } elseif ($row['status'] == 0) {
-                 $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
-                 echo '<p class="text-center">'.date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']).'</p></div><div class="block text-center">'.tools::escape($diff).'m</div></div>';
-                 $closed = False;
-               } elseif ($row['status'] == 1) {
-                 echo '<div class="container"><div class="block '.($outages['rows'][$i +1]['flag'] != NULL ? 'orange"><p>Origin Network issue' : 'red"><p>Downtime');
-                 echo '</p></div><div class="block">';
-                 $closed = True;
-              }
-            }
-          }
+    ?>
 
-          ?>
-
-      </div>
     </div>
     <div class="item ">
       <h2 class="mb-0">Overall Uptime</h2>

@@ -34,6 +34,37 @@ class statibus {
     return $response;
   }
 
+  public function getOutagesArray($serviceID=0) {
+    if ($serviceID != 0) {
+      $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
+    } else {
+      $outages = $this->rqlite->select('SELECT * FROM outages ORDER BY timestamp DESC ',True);
+    }
+
+    $response = array();
+
+    if (isset($outages['rows'][0])) {
+      $closed = False;
+      for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
+        $row = $outages['rows'][$i];
+        if ($row['status'] == 0 && !$closed) {
+           $response[$i]['header'] = 'Downtime';
+           $response[$i]['message'] = 'Offline since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
+           $response[$i]['downtime'] = 'ongoing';
+         } elseif ($row['status'] == 0) {
+             $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
+           $response[$i -1]['message'] = date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
+           $response[$i -1]['downtime'] = tools::escape($diff);
+           $closed = False;
+         } elseif ($row['status'] == 1) {
+           $response[$i]['header'] = ($outages['rows'][$i +1]['flag'] != NULL ? 'Origin Network issue' : 'Downtime');
+           $closed = True;
+        }
+      }
+    }
+    return $response;
+  }
+
   public function sql() {
     return $this->rqlite;
   }
