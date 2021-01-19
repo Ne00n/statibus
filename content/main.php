@@ -27,13 +27,25 @@ if (isset($data['rows'])) {
       <p class="mt-0">Last update: <?php echo date('d M H:i', $lastrun); ?></p>
     </div>
     <div class="item box">
-      <?php
-      if ($isDown) {
-        echo '<h2 class="ml-1"><span class="dot dot-orange"></span> Some systems are <blah class="orange">down</blah></h2>';
-      } else {
-        echo '<h2 class="ml-1"><span class="dot dot-green"></span> All systems <blah class="green">operational</blah></h2>';
-      }
-      ?>
+      <div class="container p-0">
+        <div class="halfOblock heading">
+          <?php
+          if ($isDown) {
+            echo '<h2 class="ml-1"><span class="dot dot-orange"></span> Some systems are <blah class="orange">down</blah></h2>';
+          } else {
+            echo '<h2 class="ml-1"><span class="dot dot-green"></span> All systems <blah class="green">operational</blah></h2>';
+          }
+          ?>
+        </div>
+        <div class="halfOblock text-right">
+          <a href="feed.rss"><svg class="rss" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="32" height="32">
+            <rect   class="rssBody" width="8" height="8" rx="1.5" />
+            <circle class="rssSymbol" cx="2" cy="6" r="1" />
+            <path   class="rssSymbol" d="m 1,4 a 3,3 0 0 1 3,3 h 1 a 4,4 0 0 0 -4,-4 z" />
+            <path   class="rssSymbol" d="m 1,2 a 5,5 0 0 1 5,5 h 1 a 6,6 0 0 0 -6,-6 z" />
+          </svg></a>
+        </div>
+      </div>
     </div>
     <?php
 
