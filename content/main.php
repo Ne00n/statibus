@@ -41,12 +41,12 @@ if (isset($data['rows'])) {
       $lastGroup = "";
       foreach ($data['rows'] as $row) {
 
-        if ($lastGroup != $row['gname']) {
+        if ($lastGroup != $row['gid']) {
           if ($lastGroup != "") { echo '</div></div>'; }
           echo '<div class="item "><h2 class="mb-0">'.tools::escape($row['gname']).' <small>Last 90 Days of Uptime</small></h2></div>';
           echo '<div class="item"></div>';
           echo '<div class="item box"><div class="services">';
-          $lastGroup = $row['gname'];
+          $lastGroup = $row['gid'];
         }
 
         echo '<div class="container">';
