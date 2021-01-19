@@ -20,7 +20,7 @@ class cron {
   }
 
   public function check($options) {
-    $data = $this->rqlite->select('SELECT * FROM services JOIN uptime ON uptime.serviceID=services.id WHERE services.id='.$options['i'].' ',True);
+    $data = $this->rqlite->select('SELECT * FROM services WHERE id='.$options['i'].' ',True);
     if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
     $data = $data['rows'][0];
     print("Checking ".$data['id']."\n");
@@ -41,7 +41,13 @@ class cron {
     } elseif ($data['method'] == "http") {
       $response = $this->rqlite->fetchData($data['target'],"GET",NULL,True,$data['timeout']);
       if (strpos($data['httpcodes'], ',') !== false) {  $statusCodes = explode( ',', $data['httpcodes']); } else { $statusCodes = array($data['httpcodes']); }
-      if (in_array($response['http'], $statusCodes)) { $status = 1; } else { $status = 0; }
+      if (in_array($response['http'], $statusCodes) && $data['keyword'] == "") {
+        $status = 1;
+      } elseif (in_array($response['http'], $statusCodes) && strpos($response['content'], $data['keyword']) !== false) {
+        $status = 1;
+      } else {
+        $status = 0;
+      }
       $this->updateStatus($data['id'],$status,$data['status']);
     } else {
       echo "Method not supported.\n";

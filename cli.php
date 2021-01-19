@@ -23,7 +23,8 @@ if (count($argv) == 1) {
     if ($argv[2] == 'add') {
       if (!isset($argv[7])) { $argv[7] = 3; }
       if (!isset($argv[8])) { $argv[8] = 200; }
-      $response = $rqlite->insert('INSERT INTO services(groupID,name,status,method,target,timeout,httpcodes) VALUES("'.$argv[3].'","'.$argv[4].'",1,"'.$argv[5].'","'.$argv[6].'","'.$argv[7].'","'.$argv[8].'")');
+      if (!isset($argv[9])) { $argv[9] = null; }
+      $response = $rqlite->insert('INSERT INTO services(groupID,name,status,method,target,timeout,httpcodes,keyword) VALUES("'.$argv[3].'","'.$argv[4].'",1,"'.$argv[5].'","'.$argv[6].'","'.$argv[7].'","'.$argv[8].'","'.$argv[9].'")');
       if (isset($response['error']) && $response != False) { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); die(); }
       $response = $rqlite->insert('INSERT INTO uptime(serviceID,detailed,oneDay,sevenDays,fourteenDays,thirtyDays,ninetyDays) VALUES("'.$response["content"]["results"][0]["last_insert_id"].'","W10=","100.00","100.00","100.00","100.00","100.00")');
       print(tools::checkResult($response));

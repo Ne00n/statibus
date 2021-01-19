@@ -36,8 +36,11 @@ body {
 }
 
 @media (max-width: 1115px) {
-  div .statusm {
+  div .status-text {
     margin-left: 1em;
+  }
+  div .service-text {
+    margin-left: 0.5em;
   }
 }
 
@@ -64,7 +67,7 @@ body {
   div .block {
     flex: 0 100%;
   }
-  div .statusm {
+  div .status-text {
     text-align: right;
     margin-right: 1em;
   }
@@ -163,7 +166,7 @@ body {
  margin-left: 1em;
 }
 
-.statusm {
+.status-text {
  margin-left: 2em;
 }
 
@@ -186,11 +189,11 @@ body {
 }
 
 .service {
-flex: 0 22%;
+flex: 0 25%;
 }
 
 .uptime {
-  flex: 0 68%;
+  flex: 0 65%;
 }
 
 .status {

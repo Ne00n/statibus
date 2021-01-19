@@ -50,7 +50,7 @@ if (isset($data['rows'])) {
         }
 
         echo '<div class="container">';
-        echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline">'.$row['name'].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2)."%" : 'n/a').'</span></div>';
+        echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline service-text">'.$row['name'].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2)."%" : 'n/a').'</span></div>';
         echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
         $detailed = json_decode(base64_decode($row['detailed']),True); $spacing = 7;
         $keys = array_keys($detailed);
@@ -80,13 +80,15 @@ if (isset($data['rows'])) {
         }
 
         echo '</svg></div>';
-        echo '<div class="status"><p class="'.($row['status'] ? "green" : 'red').' statusm">'.($row['status'] ? "Online" : 'Offline').'</p></div>';
+        echo '<div class="status"><p class="'.($row['status'] ? "green" : 'red').' status-text">'.($row['status'] ? "Online" : 'Offline').'</p></div>';
         echo '</div>';
 
       }
       echo '</div></div>';
     } else {
-      echo '<h2 class="text-center">No services added.</h2>';
+      echo '<div class="item"></div>';
+      echo '<div class="item"></div>';
+      echo '<div class="item box"><h2 class="text-center">No services added.</h2></div>';
     }
 
     ?>
