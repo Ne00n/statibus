@@ -86,7 +86,9 @@ if (isset($data['rows'])) {
       }
       echo '</div></div>';
     } else {
-      echo '<h2 class="text-center">No services added.</h2>';
+      echo '<div class="item"></div>';
+      echo '<div class="item"></div>';
+      echo '<div class="item box"><h2 class="text-center">No services added.</h2></div>';
     }
 
     ?>
