@@ -35,11 +35,7 @@ class statibus {
   }
 
   public function getOutagesArray($serviceID=0) {
-    if ($serviceID != 0) {
-      $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
-    } else {
-      $outages = $this->rqlite->select('SELECT * FROM outages ORDER BY timestamp DESC ',True);
-    }
+    $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
 
     $response = array();
 
@@ -49,7 +45,7 @@ class statibus {
         $row = $outages['rows'][$i];
         if ($row['status'] == 0 && !$closed) {
            $response[$i]['header'] = 'Downtime';
-           $response[$i]['message'] = 'Offline since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
+           $response[$i]['message'] = 'since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
            $response[$i]['downtime'] = 'ongoing';
          } elseif ($row['status'] == 0) {
              $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
