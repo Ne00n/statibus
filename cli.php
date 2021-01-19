@@ -40,6 +40,7 @@ if (count($argv) == 1) {
   } elseif ($argv[1] == 'group') {
     if ($argv[2] == 'add') {
       $response = $rqlite->insert('INSERT INTO groups(name) VALUES("'.$argv[3].'")');
+      print(tools::checkResult($response));
     } elseif ($argv[2] == 'list') {
       $response = $rqlite->select('SELECT * FROM groups',True);
       if (empty($response)) { echo "No groups added.\n"; die(); }
