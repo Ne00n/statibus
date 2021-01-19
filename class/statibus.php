@@ -35,25 +35,29 @@ class statibus {
   }
 
   public function getOutagesArray($serviceID=0) {
-    $outages = $this->rqlite->select('SELECT * FROM outages WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
+    $outages = $this->rqlite->select('SELECT o.id,o.status,o.timestamp,o.flag,s.name FROM outages as o JOIN services as s ON s.id=o.serviceID WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
 
     $response = array();
 
     if (isset($outages['rows'][0])) {
       $closed = False;
       for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
-        $row = $outages['rows'][$i];
+        $row = $outages['rows'][$i]; $before = $outages['rows'][($i == 0 ? 0 : $i -1)];
         if ($row['status'] == 0 && !$closed) {
-           $response[$i]['header'] = 'Downtime';
-           $response[$i]['message'] = 'since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
-           $response[$i]['downtime'] = 'ongoing';
+           $response[$row['id']]['header'] = 'Downtime';
+           $response[$row['id']]['message'] = 'since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
+           $response[$row['id']]['timestamp'] = $row['timestamp'];
+           $response[$row['id']]['downtime'] = 'ongoing';
+           $response[$row['id']]['name'] = $row['name'];
          } elseif ($row['status'] == 0) {
              $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
-           $response[$i -1]['message'] = date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
-           $response[$i -1]['downtime'] = tools::escape($diff);
+           $response[$before['id']]['message'] = date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
+           $response[$before['id']]['downtime'] = tools::escape($diff);
            $closed = False;
          } elseif ($row['status'] == 1) {
-           $response[$i]['header'] = ($outages['rows'][$i +1]['flag'] != NULL ? 'Origin Network issue' : 'Downtime');
+           $response[$row['id']]['header'] = ($outages['rows'][$i +1]['flag'] != NULL ? 'Origin Network issue' : 'Downtime');
+           $response[$row['id']]['timestamp'] = $row['timestamp'];
+           $response[$row['id']]['name'] = $row['name'];
            $closed = True;
         }
       }

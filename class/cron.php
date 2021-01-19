@@ -2,11 +2,13 @@
 
 class cron {
 
+  private $statibus;
   private $rqlite;
   private $uptime;
 
   public function __construct($rqliteIP,$rqlitePort) {
     $this->rqlite = new rqlite($rqliteIP,$rqlitePort);
+    $this->statibus = new statibus($rqliteIP,$rqlitePort);
   }
 
   public function run() {
@@ -17,6 +19,30 @@ class cron {
         backgroundProcess::startProcess("/usr/bin/php cron/runner.php -i ".$row['id']);
       }
     }
+
+    sleep(20);
+
+    $events = array();
+
+    $services = $this->rqlite->select('SELECT id FROM services',True);
+    foreach ($services['rows'] as $service) {
+      $outages = $this->statibus->getOutagesArray($service['id']);
+      $events = array_merge($events,$outages);
+    }
+
+    usort($events, function($a, $b) {
+        return $b['timestamp'] <=> $a['timestamp'];
+    });
+
+    $rss = '<?xml version="1.0" encoding="UTF-8" ?>'."\r\n".'<rss version="2.0">'."\r\n"."<channel>\r\n";
+    foreach ($events as $event) {
+         $rss .= '<item>';
+         $rss .= '<title>'.$event['name'].' '.$event['header'].'</title>';
+         $rss .= '<description>'.$event['message'].'</description>';
+         $rss .= '<pubDate>' . date("D, d M Y H:i:s O", $event['timestamp']) . '</pubDate></item>'."\r\n";
+    }
+    $rss .= "</channel>\r\n</rss>";
+    file_put_contents('feed.rss', $rss);
   }
 
   public function check($options) {
