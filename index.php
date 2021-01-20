@@ -1,8 +1,8 @@
 <?php
 
 $startTime = microtime(true);
-include 'content/check.php';
 include 'configs/config.php';
+include 'content/check.php';
 
 function dat_loader($class) {
     include 'class/' . $class . '.php';
