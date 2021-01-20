@@ -1,5 +1,7 @@
 <?php
 
+$startTime = microtime(true);
+include 'content/check.php';
 include 'configs/config.php';
 
 function dat_loader($class) {
@@ -16,6 +18,6 @@ if (isset($_GET["service"])) {
   include 'content/main.php';
 }
 
-include 'content/footer.html';
+include 'content/footer.php';
 
 ?>
