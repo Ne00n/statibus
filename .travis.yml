@@ -5,6 +5,7 @@ before_script:
   - tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz
   - cd rqlite-v5.8.0-linux-amd64
   - ./rqlited ~/node.1 &
+  - echo $PWD
 
 php:
   - '7.3'
