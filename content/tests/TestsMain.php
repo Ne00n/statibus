@@ -8,7 +8,7 @@ class TestsMain extends TestCase {
 
 	public function setUp(): void {
     //Load config
-    include 'content/config.example.php';
+    include 'configs/config.example.php';
 		//Load classes
 		function dat_loader($class) {
 				include 'class/' . $class . '.php';
