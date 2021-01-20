@@ -8,9 +8,9 @@
 
     public static function checkResult($response) {
       if (!isset($response['error']) && $response != False) {
-        return "Success\n";
+        return "Success";
       } else {
-        return "Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n";
+        return "Error: ".($response != False ? $response['error'] : "rqlite not reachable.");
       }
     }
 
