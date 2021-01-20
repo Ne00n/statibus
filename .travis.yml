@@ -1,7 +1,6 @@
 language: php
 
 before_script:
-  - echo $PWD
   - curl -L https://github.com/rqlite/rqlite/releases/download/v5.8.0/rqlite-v5.8.0-linux-amd64.tar.gz -o rqlite-v5.8.0-linux-amd64.tar.gz
   - tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz
   - cd rqlite-v5.8.0-linux-amd64
@@ -11,4 +10,4 @@ php:
   - '7.3'
   - '7.4'
 
-script: phpunit content/tests/primary.php
+script: vendor/bin/phpunit content/tests/primary.php
