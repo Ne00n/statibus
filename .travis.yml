@@ -10,4 +10,4 @@ php:
   - '7.3'
   - '7.4'
 
-script: phpunit content/tests/TestsMain.php
+script: vendor/bin/phpunit content/tests/TestsMain.php
