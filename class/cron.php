@@ -38,6 +38,7 @@ class cron {
     foreach ($events as $event) {
          $rss .= '<item>';
          $rss .= '<title>'.$event['name'].' '.$event['header'].'</title>';
+         $rss .= '<link>https://'._domain.'/index.php?service='.$event['serviceID'].'</link>';
          $rss .= '<description>'.$event['message'].'</description>';
          $rss .= '<pubDate>' . date("D, d M Y H:i:s O", $event['timestamp']) . '</pubDate></item>'."\r\n";
     }

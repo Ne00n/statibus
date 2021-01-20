@@ -35,7 +35,7 @@ class statibus {
   }
 
   public function getOutagesArray($serviceID=0) {
-    $outages = $this->rqlite->select('SELECT o.id,o.status,o.timestamp,o.flag,s.name FROM outages as o JOIN services as s ON s.id=o.serviceID WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
+    $outages = $this->rqlite->select('SELECT o.id,o.status,o.timestamp,o.flag,s.name,s.id as serviceID FROM outages as o JOIN services as s ON s.id=o.serviceID WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
 
     $response = array();
 
@@ -49,6 +49,7 @@ class statibus {
            $response[$row['id']]['timestamp'] = $row['timestamp'];
            $response[$row['id']]['downtime'] = 'ongoing';
            $response[$row['id']]['name'] = $row['name'];
+           $response[$row['id']]['serviceID'] = $row['serviceID'];
          } elseif ($row['status'] == 0) {
              $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
            $response[$before['id']]['message'] = date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
@@ -57,6 +58,7 @@ class statibus {
          } elseif ($row['status'] == 1) {
            $response[$row['id']]['header'] = ($outages['rows'][$i +1]['flag'] != NULL ? 'Origin Network issue' : 'Downtime');
            $response[$row['id']]['timestamp'] = $row['timestamp'];
+           $response[$row['id']]['serviceID'] = $row['serviceID'];
            $response[$row['id']]['name'] = $row['name'];
            $closed = True;
         }
