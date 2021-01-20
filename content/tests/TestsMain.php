@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class TestsPrimary extends TestCase {
+class TestsMain extends TestCase {
 
   private $statibus;
 
