@@ -13,5 +13,10 @@ before_script:
 php:
   - '7.3'
   - '7.4'
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
 
 script: vendor/bin/phpunit
