@@ -67,11 +67,17 @@ body {
   div .block {
     flex: 0 100%;
   }
+  div .heading {
+    flex: 0 100%;
+  }
   div .status-text {
     text-align: right;
     margin-right: 1em;
   }
   #rstatus {
+    display: none;
+  }
+  div .rss {
     display: none;
   }
 }
@@ -166,8 +172,16 @@ body {
  margin-left: 1em;
 }
 
+.p-0 {
+  padding: 0px;
+}
+
 .status-text {
  margin-left: 2em;
+}
+
+.rss {
+  margin-right: 1em;
 }
 
 .mr-1 {
@@ -198,6 +212,10 @@ flex: 0 25%;
 
 .status {
   flex: 0 10%;
+}
+
+.halfOblock {
+  flex: 0 50%;
 }
 
 .block {
@@ -249,4 +267,12 @@ a:hover {
 
 a:active {
   color: white;
+}
+
+.rssBody {
+  stroke: none; fill: #d4a01b;
+}
+
+.rssSymbol {
+  stroke: none; fill: white;
 }

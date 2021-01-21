@@ -3,6 +3,9 @@
 //Title
 define("_title","whatever");
 
+//Domain
+define("_domain","statibus.local");
+
 //Timezone
 date_default_timezone_set('Europe/Amsterdam');
 
