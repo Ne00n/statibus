@@ -1,7 +1,7 @@
 <?php
 
 #Load config
-include_once 'content/configs/config.example.php';
+include_once 'configs/config.example.php';
 
 use PHPUnit\Framework\TestCase;
 
