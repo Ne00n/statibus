@@ -18,6 +18,8 @@ class statibusTest extends TestCase {
 
   public function testAddService(): void {
     $this->assertTrue($this->statibus->serviceAdd(array(3 => 'Servers',4 => 'Server',5 => "ping",6 => "8.8.8.8")));
+    $this->assertTrue($this->statibus->serviceAdd(array(3 => 'Servers',4 => 'HTTP',5 => "port",6 => "8.8.8.8:80",7 => 2)));
+    $this->assertTrue($this->statibus->serviceAdd(array(3 => 'Servers',4 => 'Website',5 => "http",6 => "https://website.com",7 => 4,8 => 200)));
   }
 
   public function testDeleteService(): void {
