@@ -30,16 +30,11 @@ if (count($argv) == 1) {
     }
   } elseif ($argv[1] == 'group') {
     if ($argv[2] == 'add') {
-      $response = $rqlite->insert('INSERT INTO groups(name) VALUES("'.$argv[3].'")');
-      print(tools::checkResult($response));
+      $statibus->groupAdd($argv);
     } elseif ($argv[2] == 'list') {
-      $response = $rqlite->select('SELECT * FROM groups',True);
-      if (empty($response)) { echo json_encode(array('error' => 'No groups added.'),JSON_PRETTY_PRINT)."\n"; die(); }
-      tools::checkRow($response);
-      echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
+      $statibus->groupList($argv);
     } elseif ($argv[2] == 'delete') {
-      $response = $rqlite->delete('DELETE FROM groups WHERE name="'.$argv[3].'"');
-      print(tools::checkResult($response));
+      $statibus->groupDelete($argv);
     }
   }
 

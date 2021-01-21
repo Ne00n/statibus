@@ -31,7 +31,6 @@ class statibus {
     $response = $this->rqlite->insert('INSERT INTO uptime(serviceID,detailed,oneDay,sevenDays,fourteenDays,thirtyDays,ninetyDays) VALUES("'.$response["content"]["results"][0]["last_insert_id"].'","W10=","100.00","100.00","100.00","100.00","100.00")');
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
-
     return True;
   }
 
@@ -41,7 +40,6 @@ class statibus {
 
     tools::checkRow($response);
     echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
-
     return True;
   }
 
@@ -50,7 +48,31 @@ class statibus {
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
+    return True;
+  }
 
+  public function groupAdd($params) {
+    $response = $this->rqlite->insert('INSERT INTO groups(name) VALUES("'.$params[3].'")');
+
+    $status = tools::checkResult($response);
+    print($status."\n"); if ($status != "Success") { return False; }
+    return True;
+  }
+
+  public function groupList($params) {
+    $response = $this->rqlite->select('SELECT * FROM groups',True);
+    if (empty($response)) { echo json_encode(array('error' => 'No groups added.'),JSON_PRETTY_PRINT)."\n"; return False; }
+
+    tools::checkRow($response);
+    echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
+    return True;
+  }
+
+  public function groupDelete($params) {
+    $response = $this->rqlite->delete('DELETE FROM groups WHERE name="'.$params[3].'"');
+    
+    $status = tools::checkResult($response);
+    print($status."\n"); if ($status != "Success") { return False; }
     return True;
   }
 
