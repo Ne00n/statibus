@@ -5,7 +5,7 @@ include_once 'configs/config.example.php';
 
 use PHPUnit\Framework\TestCase;
 
-class rqliteTest extends TestCase {
+class statibusTest extends TestCase {
   private $statibus;
 
   public function setUp(): void {
