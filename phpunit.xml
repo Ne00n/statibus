@@ -1,0 +1,7 @@
+<phpunit>
+  <testsuites>
+    <testsuite name="main">
+      <file>content/tests/rqliteTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
