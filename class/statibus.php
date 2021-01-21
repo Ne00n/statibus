@@ -34,7 +34,7 @@ class statibus {
     return True;
   }
 
-  public function serviceList($params) {
+  public function serviceList() {
     $response = $this->rqlite->select('SELECT * FROM services',True);
     if (empty($response)) { echo json_encode(array('error' => 'No services added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
@@ -59,7 +59,7 @@ class statibus {
     return True;
   }
 
-  public function groupList($params) {
+  public function groupList() {
     $response = $this->rqlite->select('SELECT * FROM groups',True);
     if (empty($response)) { echo json_encode(array('error' => 'No groups added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
@@ -70,7 +70,7 @@ class statibus {
 
   public function groupDelete($params) {
     $response = $this->rqlite->delete('DELETE FROM groups WHERE name="'.$params[3].'"');
-    
+
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
     return True;

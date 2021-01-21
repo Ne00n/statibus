@@ -24,7 +24,7 @@ if (count($argv) == 1) {
     if ($argv[2] == 'add') {
       $statibus->serviceAdd($argv);
     } elseif ($argv[2] == 'list') {
-      $statibus->serviceList($argv);
+      $statibus->serviceList();
     } elseif ($argv[2] == 'delete') {
       $statibus->serviceDelete($argv);
     }
@@ -32,7 +32,7 @@ if (count($argv) == 1) {
     if ($argv[2] == 'add') {
       $statibus->groupAdd($argv);
     } elseif ($argv[2] == 'list') {
-      $statibus->groupList($argv);
+      $statibus->groupList();
     } elseif ($argv[2] == 'delete') {
       $statibus->groupDelete($argv);
     }
