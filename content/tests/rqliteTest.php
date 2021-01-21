@@ -9,7 +9,7 @@ class rqliteTest extends TestCase {
   private $rqlite;
 
   public function setUp(): void {
-    $this->rqlite = new rqlite($rqliteIP,$rqlitePort);
+    $this->rqlite = new rqlite(_rqliteIP,_rqlitePort);
   }
 
   public function testInit(): void {
