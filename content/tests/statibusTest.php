@@ -22,11 +22,18 @@ class statibusTest extends TestCase {
     $this->assertTrue($this->statibus->serviceAdd(array(3 => 'Servers',4 => 'Website',5 => "http",6 => "https://website.com",7 => 4,8 => 200)));
   }
 
+  public function testListService(): void {
+    $this->assertTrue($this->statibus->serviceList(array()));
+  }
+
   public function testDeleteService(): void {
     $this->assertTrue($this->statibus->serviceDelete(array(3 => 'Server')));
   }
 
   public function testDeleteGroup(): void {
+    $this->assertFalse($this->statibus->groupDelete(array(3 => 'Servers')));
+    $this->assertTrue($this->statibus->serviceDelete(array(3 => 'HTTP')));
+    $this->assertTrue($this->statibus->serviceDelete(array(3 => 'Website')));
     $this->assertTrue($this->statibus->groupDelete(array(3 => 'Servers')));
   }
 
