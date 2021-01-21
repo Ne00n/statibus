@@ -55,15 +55,8 @@ php cli.php service list
 php cli.php service delete <name>
 ```
 **group**<br />
-- add
 ```
 php cli.php group add test
-```
-- list
-```
 php cli.php group list
-```
-- delete
-```
 php cli.php group delete test
 ```
