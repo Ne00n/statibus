@@ -12,10 +12,19 @@ class statibusTest extends TestCase {
     $this->statibus = new statibus(_rqliteIP,_rqlitePort);
   }
 
-  public function testStatibus(): void {
+  public function testAddGroup(): void {
     $this->assertTrue($this->statibus->groupAdd(array(3 => 'Servers')));
-    $this->assertTrue($this->statibus->serviceAdd(array(3 => 'Server',4 => "ping",5 => "8.8.8.8")));
+  }
+
+  public function testAddService(): void {
+    $this->assertTrue($this->statibus->serviceAdd(array(3 => 'Servers',4 => 'Server',5 => "ping",6 => "8.8.8.8")));
+  }
+
+  public function testDeleteService(): void {
     $this->assertTrue($this->statibus->serviceDelete(array(3 => 'Server')));
+  }
+
+  public function testDeleteGroup(): void {
     $this->assertTrue($this->statibus->groupDelete(array(3 => 'Servers')));
   }
 
