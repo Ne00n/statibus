@@ -1,2 +1,6 @@
 rqlite-*
 feed.rss
+vendor
+phpunit
+composer.phar
+.phpunit.result.cache
