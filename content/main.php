@@ -1,8 +1,8 @@
 <?php
 
 $statibus = new statibus(_rqliteIP,_rqlitePort);
-$data = $statibus->sql()->select('SELECT s.ID,s.name,g.name as gname,s.status,s.lastrun,g.id as gid,u.detailed,u.oneDay,u.sevenDays,u.thirtyDays,u.ninetyDays
-FROM services as s JOIN uptime as u ON u.serviceID=s.id JOIN groups as g ON g.id=s.groupID ORDER BY g.id',True);
+$data = $statibus->sql()->select(['SELECT s.ID,s.name,g.name as gname,s.status,s.lastrun,g.id as gid,u.detailed,u.oneDay,u.sevenDays,u.thirtyDays,u.ninetyDays
+FROM services as s JOIN uptime as u ON u.serviceID=s.id JOIN groups as g ON g.id=s.groupID ORDER BY g.id'],True);
 
 if ($data === False || isset($data['error'])) {  echo "Database ded."; die(); }
 

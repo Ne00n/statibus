@@ -48,36 +48,35 @@ class rqlite {
   }
 
   public function init() {
-    $result = $this->insert("CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,groupID INTEGER NOT NULL,name TEXT NOT NULL UNIQUE,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL,timeout INTEGER NULL,httpcodes TEXT NULL,keyword TEXT NULL,lastrun INTEGER NULL,FOREIGN KEY(groupID) REFERENCES groups(id))");
+    $result = $this->insert(['CREATE TABLE services (id INTEGER NOT NULL PRIMARY KEY,groupID INTEGER NOT NULL,name TEXT NOT NULL UNIQUE,status INTEGER NOT NULL, method TEXT NOT NULL,target TEXT NOT NULL,timeout INTEGER NULL,httpcodes TEXT NULL,keyword TEXT NULL,lastrun INTEGER NULL,FOREIGN KEY(groupID) REFERENCES groups(id))']);
     $status = tools::checkResult($result);
     print($status."\n"); if ($status != "Success") { return False; }
 
     if (!$result) { return $result; }
-    $result = $this->insert("CREATE TABLE outages (id INTEGER NOT NULL PRIMARY KEY,serviceID INTEGER NOT NULL,status INTEGER NOT NULL, timestamp INTEGER NOT NULL,flag INTEGER NULL,FOREIGN KEY(serviceID) REFERENCES services(id) ON DELETE CASCADE)");
+    $result = $this->insert(['CREATE TABLE outages (id INTEGER NOT NULL PRIMARY KEY,serviceID INTEGER NOT NULL,status INTEGER NOT NULL, timestamp INTEGER NOT NULL,flag INTEGER NULL,FOREIGN KEY(serviceID) REFERENCES services(id) ON DELETE CASCADE)']);
     $status = tools::checkResult($result);
     print($status."\n"); if ($status != "Success") { return False; }
 
     if (!$result) { return $result; }
-    $result = $this->insert("CREATE TABLE uptime (serviceID INTEGER NOT NULL PRIMARY KEY, detailed TEXT NOT NULL,oneDay DECIMAL(7,4) NOT NULL, sevenDays DECIMAL(7,4) NOT NULL, fourteenDays DECIMAL(7,4) NOT NULL, thirtyDays DECIMAL(7,4) NOT NULL, ninetyDays DECIMAL(7,4) NOT NULL, FOREIGN KEY(serviceID) REFERENCES services(id) ON DELETE CASCADE)");
+    $result = $this->insert(['CREATE TABLE uptime (serviceID INTEGER NOT NULL PRIMARY KEY, detailed TEXT NOT NULL,oneDay DECIMAL(7,4) NOT NULL, sevenDays DECIMAL(7,4) NOT NULL, fourteenDays DECIMAL(7,4) NOT NULL, thirtyDays DECIMAL(7,4) NOT NULL, ninetyDays DECIMAL(7,4) NOT NULL, FOREIGN KEY(serviceID) REFERENCES services(id) ON DELETE CASCADE)']);
     $status = tools::checkResult($result);
     print($status."\n"); if ($status != "Success") { return False; }
 
     if (!$result) { return $result; }
-    $result = $this->insert("CREATE TABLE groups (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL UNIQUE)");
+    $result = $this->insert(['CREATE TABLE groups (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL UNIQUE)']);
     $status = tools::checkResult($result);
     print($status."\n"); if ($status != "Success") { return False; }
 
     if (!$result) { return $result; }
-    $result = $this->insert("PRAGMA foreign_keys = ON");
+    $result = $this->insert(['PRAGMA foreign_keys = ON']);
     $status = tools::checkResult($result);
     print($status."\n"); if ($status != "Success") { return False; }
 
     return True;
   }
 
-  public function insert($input) {
-    $command = SQLite3::escapeString($input);
-    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST','['.json_encode($command).']');
+  public function insert($sql) {
+    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST',"[".json_encode($sql)."]");
     if (!$result) { return $result; }
     return $result;
   }
@@ -86,10 +85,8 @@ class rqlite {
     return $this->insert($input);
   }
 
-  public function select($input,$tables=False) {
-    $command = SQLite3::escapeString($input);
-    $command = urlencode($command);
-    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/query?level=none&pretty&timings&q='.$command);
+  public function select($sql,$tables=False) {
+    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/query?level=none&pretty&timings','POST',"[".json_encode($sql)."]");
     if (!$result) { return $result; }
     if (isset($result['error'])) { return $result; } else {
       if ($tables) {
