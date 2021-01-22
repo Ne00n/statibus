@@ -18,24 +18,24 @@ class statibus {
   }
 
   public function serviceAdd($params) {
-    $response = $this->rqlite->select('SELECT id FROM groups WHERE name="'.$params[3].'"',True);
+    $response = $this->rqlite->select(['SELECT id FROM groups WHERE name=?',$params[3]],True);
     if (isset($response['rows'])) { $groupID = $response['rows'][0]['id']; } else { echo "Error: Group not found\n"; return False; }
 
     if (!isset($params[7])) { $params[7] = 3; }
     if (!isset($params[8])) { $params[8] = 200; }
-    if (!isset($params[9])) { $params[9] = null; }
+    if (!isset($params[9])) { $params[9] = ""; }
 
-    $response = $this->rqlite->insert('INSERT INTO services(groupID,name,status,method,target,timeout,httpcodes,keyword) VALUES("'.$groupID.'","'.$params[4].'",1,"'.$params[5].'","'.$params[6].'","'.$params[7].'","'.$params[8].'","'.$params[9].'")');
+    $response = $this->rqlite->insert(['INSERT INTO services(groupID,name,status,method,target,timeout,httpcodes,keyword) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',$groupID,$params[4],1,$params[5],$params[6],$params[7],strval($params[8]),$params[9]]);
     if (isset($response['error']) && $response != False) { print("Error: ".($response != False ? $response['error'] : "rqlite not reachable.")."\n"); return False; }
 
-    $response = $this->rqlite->insert('INSERT INTO uptime(serviceID,detailed,oneDay,sevenDays,fourteenDays,thirtyDays,ninetyDays) VALUES("'.$response["content"]["results"][0]["last_insert_id"].'","W10=","100.00","100.00","100.00","100.00","100.00")');
+    $response = $this->rqlite->insert(['INSERT INTO uptime(serviceID,detailed,oneDay,sevenDays,fourteenDays,thirtyDays,ninetyDays) VALUES(?, ?, ?, ? ,? ,? ,?)',$response["content"]["results"][0]["last_insert_id"],"W10=","100.00","100.00","100.00","100.00","100.00"]);
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
     return True;
   }
 
   public function serviceList() {
-    $response = $this->rqlite->select('SELECT * FROM services',True);
+    $response = $this->rqlite->select(['SELECT * FROM services'],True);
     if (empty($response)) { echo json_encode(array('error' => 'No services added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
     tools::checkRow($response);
@@ -44,7 +44,7 @@ class statibus {
   }
 
   public function serviceDelete($params) {
-    $response = $this->rqlite->delete('DELETE FROM services WHERE name="'.$params[3].'"');
+    $response = $this->rqlite->delete(['DELETE FROM services WHERE name=?',$params[3]]);
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
@@ -52,7 +52,7 @@ class statibus {
   }
 
   public function groupAdd($params) {
-    $response = $this->rqlite->insert('INSERT INTO groups(name) VALUES("'.$params[3].'")');
+    $response = $this->rqlite->insert(['INSERT INTO groups(name) VALUES(?)',$params[3]]);
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
@@ -60,7 +60,7 @@ class statibus {
   }
 
   public function groupList() {
-    $response = $this->rqlite->select('SELECT * FROM groups',True);
+    $response = $this->rqlite->select(['SELECT * FROM groups'],True);
     if (empty($response)) { echo json_encode(array('error' => 'No groups added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
     tools::checkRow($response);
@@ -69,7 +69,7 @@ class statibus {
   }
 
   public function groupDelete($params) {
-    $response = $this->rqlite->delete('DELETE FROM groups WHERE name="'.$params[3].'"');
+    $response = $this->rqlite->delete(['DELETE FROM groups WHERE name=?',$params[3]]);
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
@@ -94,7 +94,7 @@ class statibus {
   }
 
   public function getOutagesArray($serviceID=0) {
-    $outages = $this->rqlite->select('SELECT o.id,o.status,o.timestamp,o.flag,s.name,s.id as serviceID FROM outages as o JOIN services as s ON s.id=o.serviceID WHERE serviceID='.$serviceID.' ORDER BY timestamp DESC ',True);
+    $outages = $this->rqlite->select(['SELECT o.id,o.status,o.timestamp,o.flag,s.name,s.id as serviceID FROM outages as o JOIN services as s ON s.id=o.serviceID WHERE serviceID=? ORDER BY timestamp DESC',$serviceID],True);
 
     $response = array();
 

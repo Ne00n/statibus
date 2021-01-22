@@ -19,7 +19,7 @@ if (count($argv) == 1) {
 } else {
 
   if ($argv[1] == "init") {
-    $rqlite->init();
+    $statibus->sql()->init();
   } elseif ($argv[1] == 'service') {
     if ($argv[2] == 'add') {
       $statibus->serviceAdd($argv);
