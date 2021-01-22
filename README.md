@@ -7,7 +7,7 @@ Minimalistic Statuspage with 30,60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Mo
 
 **Key Points**<br />
 - [rqlite](https://github.com/rqlite/rqlite) database
-- PHP 7.3+ (sqlite3,bcmath,curl)
+- PHP 7.3+ (bcmath,curl)
 - Handmade css, no framework, about 2kb
 - Zero Javascript
 
