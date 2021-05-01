@@ -136,14 +136,15 @@ class cron {
 
   private function generateDetailed($row,$outages) {
     if ($outages != NULL) { $data = $this->calcUptime($outages); } else { $data = array(); }
-    $detailed = json_decode(base64_decode($row[1]),true); $current = date("d.m");
+    $detailed = json_decode(base64_decode($row[1]),true); $current = date("d.m.y");
     if ($outages != NULL) { $detailed[$current] = $data[1]; } else { $detailed[$current] = 100; }
     //Cleanup
     $deadline = time() - (86400 * _cleanup);
     foreach ($detailed as $date => $percentage) {
       if (_cleanup == 0) { break; }
       $dateSplitted = explode(".", $date);
-      $timestamp = mktime(0, 0, 0, $dateSplitted[1], $dateSplitted[0], 0);
+      if (!isset($dateSplitted[2])) { $dateSplitted[2] = date("y"); }
+      $timestamp = mktime(0, 0, 0, $dateSplitted[1], $dateSplitted[0], $dateSplitted[2]);
       if ($timestamp < $deadline) { unset($detailed[$date]); }
     }
     $detailed = base64_encode(json_encode($detailed));
