@@ -25,6 +25,7 @@ class cron {
     $events = array();
 
     $services = $this->rqlite->select(['SELECT id FROM services'],True);
+    if (empty($services)) { echo "No Services found.\n"; die(); }
     foreach ($services['rows'] as $service) {
       $outages = $this->statibus->getOutagesArray($service['id']);
       $events = array_merge($events,$outages);
