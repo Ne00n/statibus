@@ -50,8 +50,8 @@ class cron {
   public function check($options) {
     $data = $this->rqlite->select(['SELECT * FROM services WHERE id=?',$options['i']],True);
     if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
-    $ipv6 = filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     $data = $data['rows'][0];
+    $ipv6 = filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     print("Checking ".$data['id']."\n");
 
     if ($data['method'] == "ping") {
