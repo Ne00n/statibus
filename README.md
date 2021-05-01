@@ -16,7 +16,8 @@ Minimalistic Statuspage with 30,60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Mo
 
 ## QuickSetup:
 
-1. Get a rqlite instance up and running
+1. Get a rqlite instance up and running<br />
+Check configs/rqlite.service if you wish to run rqlite as a service.
 2. Rename configs/config.example.php to configs/config.php, you may edit it
 2. To Initialize the databse run:
 ```
