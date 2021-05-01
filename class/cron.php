@@ -141,6 +141,7 @@ class cron {
     //Cleanup
     $deadline = time() - (86400 * _cleanup);
     foreach ($detailed as $date => $percentage) {
+      if (_cleanup == 0) { break; }
       $dateSplitted = explode(".", $date);
       $timestamp = mktime(0, 0, 0, $dateSplitted[1], $dateSplitted[0], 0);
       if ($timestamp < $deadline) { unset($detailed[$date]); }
