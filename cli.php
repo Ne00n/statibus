@@ -12,10 +12,10 @@ spl_autoload_register('dat_loader');
 $statibus = new statibus(_rqliteIP,_rqlitePort);
 
 if (count($argv) == 1) {
-  print("<service> add <name> <method> <target> <timeout> <httpcode(s)>\n");
-  print("<group> add <name>\n");
-  print("<service/group> delete <id>\n");
-  print("<service/group> list\n");
+  print("service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>\n");
+  print("group add <name>\n");
+  print("service/group delete <id>\n");
+  print("service/group list\n");
 } else {
 
   if ($argv[1] == "init") {
