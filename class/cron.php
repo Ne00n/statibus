@@ -49,14 +49,20 @@ class cron {
   public function check($options) {
     $data = $this->rqlite->select(['SELECT * FROM services WHERE id=?',$options['i']],True);
     if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
+    $ipv6 = filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     $data = $data['rows'][0];
     print("Checking ".$data['id']."\n");
+
     if ($data['method'] == "ping") {
-      exec("ping -c 3 " . $data['target'], $output, $result);
+      if ($ipv6) {
+        exec("ping6 -c 3 " . $data['target'], $output, $result);
+      } else {
+        exec("ping -c 3 " . $data['target'], $output, $result);
+      }
       if ($result == 0) { $status = 1; } else { $status = 0; }
-      $this->updateStatus($data['id'],$status,$data['status']);
+
     } elseif ($data['method'] == "port") {
-      if (filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+      if ($ipv6) {
         list($ip, $port) = explode("]:", $data['target']);
         $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $service[5]);
       } else {
@@ -64,7 +70,7 @@ class cron {
         $fp = fsockopen($ip,$port, $errno, $errstr, $data['timeout']);
       }
       if ($fp) { $status = 1; } else { $status = 0; }
-      $this->updateStatus($data['id'],$status,$data['status']);
+
     } elseif ($data['method'] == "http") {
       $response = $this->rqlite->fetchData($data['target'],"GET",NULL,True,$data['timeout']);
       if (strpos($data['httpcodes'], ',') !== false) {  $statusCodes = explode( ',', $data['httpcodes']); } else { $statusCodes = array($data['httpcodes']); }
@@ -75,10 +81,11 @@ class cron {
       } else {
         $status = 0;
       }
-      $this->updateStatus($data['id'],$status,$data['status']);
+
     } else {
       echo "Method not supported.\n";
     }
+    $this->updateStatus($data['id'],$status,$data['status']);
   }
 
   private function updateStatus($id,$current,$oldState) {
