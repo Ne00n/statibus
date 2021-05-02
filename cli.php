@@ -15,7 +15,7 @@ if (count($argv) == 1) {
   print("service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>\n");
   print("group add <name>\n");
   print("remote add <name> <url>\n");
-  print("service/group/remote delete <id>\n");
+  print("service/group/remote delete <name>\n");
   print("service/group/remote list\n");
 } else {
 
