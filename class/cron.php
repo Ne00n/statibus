@@ -72,7 +72,7 @@ class cron {
     } elseif ($data['method'] == "port") {
       if ($ipv6) {
         list($ip, $port) = explode("]:", $data['target']);
-        $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $service[5]);
+        $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $data['timeout']);
       } else {
         list($ip, $port) = explode(":", $data['target']);
         $fp = fsockopen($ip,$port, $errno, $errstr, $data['timeout']);
