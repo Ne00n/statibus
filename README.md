@@ -12,7 +12,7 @@ Minimalistic Statuspage with 30,60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Mo
 - Zero Javascript
 
 **ToDo**<br />
-- external checks
+- nothin
 
 ## QuickSetup:
 
@@ -59,6 +59,7 @@ php cli.php group delete <name>
 ```
 **remotes**<br />
 ```
+#url example: https://check.com/check.php you can rename the file of course
 php cli.php remote add <name> <url>
 php cli.php remote list
 php cli.php remote delete <name>
