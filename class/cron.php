@@ -117,7 +117,7 @@ class cron {
     if (!isset($remotes['rows'][0])) { echo "No Remotes found, skipping\n"; return $status; }
     if ($status != 0) { return $status; }
     $remotes = $remotes['rows'];
-    $checks = array(); $failed = 0; $success = 0;
+    $checks = array(); $failed = 0; $success = 0; $errors = 0;
 
     for ($i=1; $i <= _remoteChecks; $i++) {
       $check = $this->getUniqueRemote($remotes,$checks);
@@ -134,10 +134,13 @@ class cron {
         } else {
           if ($content['status']) { $success++; } else { $failed++; }
         }
+      } elseif ($response['http'] == 0) {
+        $errors++;
       } else {
         $failed++;
       }
     }
+    if ($errors == _remoteChecks) { return 1; }
     if ($success >= _remoteThreshold) { return 1; }
     return 0;
   }
