@@ -38,9 +38,8 @@ SQL Migrations: https://github.com/Ne00n/statibus/tree/main/migrations
 
 ## CLI
 **service**<br />
-- add
 ```
-#php cli.php service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>
+php cli.php service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>
 ```
 Examples:
 ```
@@ -49,15 +48,18 @@ php cli.php service add Servers Service port 8.8.8.8:80 2
 php cli.php service add Servers Website http https://website.com 2 200
 php cli.php service add Servers Website http https://website.com 2 400,404
 php cli.php service add Servers Keyword http https://keyword.com 2 200 clusterfuck
-```
-- other
-```
 php cli.php service list
 php cli.php service delete <name>
 ```
 **group**<br />
 ```
-php cli.php group add test
+php cli.php group add <name>
 php cli.php group list
-php cli.php group delete test
+php cli.php group delete <name>
+```
+**remotes**<br />
+```
+php cli.php remote add <name> <url>
+php cli.php remote list
+php cli.php remote delete <name>
 ```

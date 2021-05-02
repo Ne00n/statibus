@@ -68,6 +68,11 @@ class rqlite {
     print($status."\n"); if ($status != "Success") { return False; }
 
     if (!$result) { return $result; }
+    $result = $this->insert(['CREATE TABLE remotes (id INTEGER NOT NULL PRIMARY KEY,name TEXT NOT NULL UNIQUE, url TEXT NOT NULL,status INTEGER DEFAULT 0, lastrun INTEGER NULL)']);
+    $status = tools::checkResult($result);
+    print($status."\n"); if ($status != "Success") { return False; }
+
+    if (!$result) { return $result; }
     $result = $this->insert(['PRAGMA foreign_keys = ON']);
     $status = tools::checkResult($result);
     print($status."\n"); if ($status != "Success") { return False; }

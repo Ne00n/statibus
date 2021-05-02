@@ -35,20 +35,11 @@ class statibus {
   }
 
   public function serviceList() {
-    $response = $this->rqlite->select(['SELECT * FROM services'],True);
-    if (empty($response)) { echo json_encode(array('error' => 'No services added.'),JSON_PRETTY_PRINT)."\n"; return False; }
-
-    tools::checkRow($response);
-    echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
-    return True;
+    return $this->list("services");
   }
 
   public function serviceDelete($params) {
-    $response = $this->rqlite->delete(['DELETE FROM services WHERE name=?',$params[3]]);
-
-    $status = tools::checkResult($response);
-    print($status."\n"); if ($status != "Success") { return False; }
-    return True;
+    return $this->delete("services",$params);
   }
 
   public function groupAdd($params) {
@@ -60,16 +51,40 @@ class statibus {
   }
 
   public function groupList() {
-    $response = $this->rqlite->select(['SELECT * FROM groups'],True);
-    if (empty($response)) { echo json_encode(array('error' => 'No groups added.'),JSON_PRETTY_PRINT)."\n"; return False; }
+    return $this->list("groups");
+  }
+
+  public function groupDelete($params) {
+    return $this->delete("groups",$params);
+  }
+
+  public function remoteAdd($params) {
+    $response = $this->rqlite->insert(['INSERT INTO remotes(name,url) VALUES(?,?)',$params[3],$params[4]]);
+
+    $status = tools::checkResult($response);
+    print($status."\n"); if ($status != "Success") { return False; }
+    return True;
+  }
+
+  public function remoteList() {
+    return $this->list("remotes");
+  }
+
+  public function remoteDelete($params) {
+    return $this->delete("remotes",$params);
+  }
+
+  public function list($table) {
+    $response = $this->rqlite->select(['SELECT * FROM '.$table],True);
+    if (empty($response)) { echo json_encode(array('error' => 'No remotes added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
     tools::checkRow($response);
     echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
     return True;
   }
 
-  public function groupDelete($params) {
-    $response = $this->rqlite->delete(['DELETE FROM groups WHERE name=?',$params[3]]);
+  public function delete($table,$params) {
+    $response = $this->rqlite->delete(['DELETE FROM '.$table.' WHERE name=?',$params[3]]);
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
