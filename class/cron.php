@@ -55,6 +55,8 @@ class cron {
   public function check($options) {
     $data = $this->rqlite->select(['SELECT * FROM services WHERE id=?',$options['i']],True);
     if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
+    $remotes = $this->rqlite->select(['SELECT * FROM remotes'],True);
+
     $data = $data['rows'][0];
     $ipv6 = filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     print("Checking ".$data['id']."\n");
@@ -79,19 +81,65 @@ class cron {
 
     } elseif ($data['method'] == "http") {
       $response = $this->rqlite->fetchData($data['target'],"GET",NULL,True,$data['timeout']);
-      if (strpos($data['httpcodes'], ',') !== false) {  $statusCodes = explode( ',', $data['httpcodes']); } else { $statusCodes = array($data['httpcodes']); }
-      if (in_array($response['http'], $statusCodes) && $data['keyword'] == "") {
-        $status = 1;
-      } elseif (in_array($response['http'], $statusCodes) && strpos($response['content'], $data['keyword']) !== false) {
-        $status = 1;
-      } else {
-        $status = 0;
-      }
+      $status = $this->checkHTTPResponse($data['httpcodes'],$response['http'],$data['keyword'],$response['content']);
 
     } else {
       echo "Method not supported.\n";
+      return False;
     }
+    $status = $this->remoteCheck($remotes,$status,$data);
     $this->updateStatus($data['id'],$status,$data['status']);
+  }
+
+  private function checkHTTPResponse($httpcodes,$http,$keyword,$content) {
+    if (strpos($httpcodes, ',') !== false) {  $statusCodes = explode( ',', $httpcodes); } else { $statusCodes = array($httpcodes); }
+    if (in_array($http, $statusCodes) && $keyword == "") {
+      return 1;
+    } elseif (in_array($http, $statusCodes) && strpos($content, $keyword) !== false) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  private function getUniqueRemote($remotes,&$checks) {
+    for ($i=0; $i < 15; $i++) {
+      $check = mt_rand(0,count($remotes) -1);
+      if (!in_array($check, $checks)) {
+        $checks[] = $check;
+        return $check;
+      }
+    }
+    return $check;
+  }
+
+  private function remoteCheck($remotes,$status,$service) {
+    if (!isset($remotes['rows'][0])) { echo "No Remotes found, skipping\n"; return $status; }
+    if ($status != 0) { return $status; }
+    $remotes = $remotes['rows'];
+    $checks = array(); $failed = 0; $success = 0;
+
+    for ($i=1; $i <= _remoteChecks; $i++) {
+      $check = $this->getUniqueRemote($remotes,$checks);
+      $remote = $remotes[$check];
+
+      $payload = json_encode(array('target' => $service['target'],'type' => $service['method'],'timeout' => $service['timeout']));
+      $response = $this->rqlite->fetchData($remote['url'],"POST",$payload,True,$service['timeout'] * 3);
+
+      if ($response['http'] == 200) {
+        $content = json_decode($response['content'],true);
+        if ($service['method'] == 'http') {
+          $status = $this->checkHTTPResponse($data['httpcodes'],$response['http'],$service['keyword'],$content['content']);
+          if ($status) { $success++; } else { $failed++; }
+        } else {
+          if ($content['status']) { $success++; } else { $failed++; }
+        }
+      } else {
+        $failed++;
+      }
+    }
+    if ($success >= _remoteThreshold) { return 1; }
+    return 0;
   }
 
   private function updateStatus($id,$current,$oldState) {
