@@ -42,7 +42,7 @@ if ($method == 'POST' && json_last_error() === 0 && in_array($requestIP, $whitel
       if ($errorNo == 0) { echo json_encode(array('result' => 1,'info' => '')); } else { echo json_encode(array('result' => 0,'info' => $errorStr)); }
 
     } elseif ($payload['type'] == 'http') {
-      $response = createRequest($payload['target'].":".$payload['port'],$payload['timeout'],$payload['connect']);
+      $response = createRequest($payload['target'],$payload['timeout'],$payload['connect']);
       echo json_encode(array('http' => $response['http'],'content' => $response['content']));
 
     }
