@@ -35,11 +35,13 @@ if ($method == 'POST' && json_last_error() === 0 && in_array($requestIP, $whitel
 
     } elseif ($payload['type'] == 'tcp') {
       if ($ipv6) {
-      	$socket = @fsockopen("[".$payload['target']."]", $payload['port'], $errorNo, $errorStr, $payload['timeout']);
+        list($ip, $port) = explode("]:", $payload['target']);
+        $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $payload['timeout']);
       } else {
-      	$socket = @fsockopen($payload['target'], $payload['port'], $errorNo, $errorStr, $payload['timeout']);
+        list($ip, $port) = explode(":", $payload['target']);
+        $fp = fsockopen($ip,$port, $errno, $errstr, $payload['timeout']);
       }
-      if ($errorNo == 0) { echo json_encode(array('result' => 1,'info' => '')); } else { echo json_encode(array('result' => 0,'info' => $errorStr)); }
+      if ($fp) { echo json_encode(array('result' => 1)); } else { echo json_encode(array('result' => 0,'err' => $errorStr)); }
 
     } elseif ($payload['type'] == 'http') {
       $response = createRequest($payload['target'],$payload['timeout'],$payload['connect']);
