@@ -8,7 +8,7 @@ User=statibus
 Group=statibus
 Type=simple
 WorkingDirectory=/home/statibus/rqlite
-ExecStart=/home/statibus/rqlite/rqlited -http-addr 127.0.0.1:4001 -raft-addr 127.0.0.1:4002
+ExecStart=/home/statibus/rqlite/rqlited datadir
 
 [Install]
 WantedBy=multi-user.target
