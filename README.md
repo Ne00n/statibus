@@ -57,7 +57,7 @@ php cli.php group add <name>
 php cli.php group list
 php cli.php group delete <name>
 ```
-**remotes**<br />
+**remotes** (optional)<br />
 ```
 #url example: https://check.com/check.php you can rename the file of course
 php cli.php remote add <name> <url>
