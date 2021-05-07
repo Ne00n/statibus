@@ -30,6 +30,9 @@ php cli.php service add Servers Server ping 8.8.8.8
 ```
 5. Enable the cronjobs, see => configs/cron|uptime.example<br />
 Run cron every 60s, uptime is for generating the uptime percentages, every 5 minutes is fine
+6. Optional you use remote probes to confirm downtimes.<br />
+To do this, put the check.php file in content/remotes on a remote server, whitelist the statibus ip and add it to statibus.<br />
+You should add at least 2 remotes, the more the better. The queries will be rotated between the remotes.<br />
 
 **You can access the databse anytime via ./rqlite in case the commands are not enough.**
 
