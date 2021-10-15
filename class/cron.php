@@ -151,7 +151,7 @@ class cron {
       $this->rqlite->insert(['INSERT INTO outages (serviceID,status,timestamp) VALUES(?,?,?)',$id,0,time()]);
       $this->rqlite->update(['UPDATE services SET status = ?,lastrun = ? WHERE id=?',0,time(),$id]);
     } elseif ($current == 1 && $oldState == 0) {
-      print($id." went is back online\n");
+      print($id." is back online\n");
       $this->rqlite->insert(['INSERT INTO outages (serviceID,status,timestamp) VALUES(?,?,?)',$id,1,time()]);
       $this->rqlite->update(['UPDATE services SET status = ?,lastrun = ? WHERE id=?',1,time(),$id]);
     } else {
