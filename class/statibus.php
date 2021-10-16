@@ -76,7 +76,7 @@ class statibus {
 
   public function list($table) {
     $response = $this->rqlite->select(['SELECT * FROM '.$table],True);
-    if (empty($response)) { echo json_encode(array('error' => 'No remotes added.'),JSON_PRETTY_PRINT)."\n"; return False; }
+    if (empty($response)) { echo json_encode(array('error' => 'Nothing added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
     tools::checkRow($response);
     echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
