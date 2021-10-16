@@ -110,7 +110,7 @@ class rqlite {
   }
 
   public function delete($input) {
-    return $this->select($input);
+    return $this->insert($input);
   }
 
 }
