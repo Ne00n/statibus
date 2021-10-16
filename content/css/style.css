@@ -51,6 +51,12 @@ body {
   }
 }
 
+@media (min-width: 685px) {
+  div .uptime {
+    margin-top: 0.5em;
+  }
+}
+
 @media (max-width: 685px) {
   div .item {
     flex: 0 100%;
@@ -154,10 +160,6 @@ body {
 
 .mt-1 {
   margin-top: 1em;
-}
-
-.mt-05 {
-  margin-top: 0.5em;
 }
 
 .mt-0 {
