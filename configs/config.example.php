@@ -10,7 +10,7 @@ define("_domain","statibus.local");
 date_default_timezone_set('Europe/Amsterdam');
 
 //Cleanup history after x days, 0 = disabled
-define("_cleanup",90);
+define("_cleanup",91);
 
 //Threshold needed to flag as Online
 define("_remoteThreshold",1);
