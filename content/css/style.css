@@ -64,11 +64,17 @@ body {
   div .service {
     flex: 0 100%;
   }
+  .service p {
+    margin-bottom: 2px;
+  }
   div .uptime {
     flex: 0 100%;
   }
   div .status {
     flex: 0 100%;
+  }
+  .status p {
+    margin-top: 2px;
   }
   div .block {
     flex: 0 100%;
