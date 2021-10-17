@@ -36,10 +36,11 @@ class statibusTest extends TestCase {
   }
 
   public function testDeleteGroup(): void {
-    $this->assertFalse($this->statibus->groupDelete(array(3 => 'Servers')));
-    $this->assertTrue($this->statibus->serviceDelete(array(3 => 'HTTP')));
-    $this->assertTrue($this->statibus->serviceDelete(array(3 => 'Website')));
-    $this->assertTrue($this->statibus->groupDelete(array(3 => 'Servers')));
+
+    $this->assertFalse($this->statibus->delete("groups",array(3 => 'Servers')));
+    $this->assertTrue($this->statibus->delete("services",array(3 => 'HTTP')));
+    $this->assertTrue($this->statibus->delete("services",array(3 => 'Website')));
+    $this->assertTrue($this->statibus->delete("groups",array(3 => 'Servers')));
   }
 
 }
