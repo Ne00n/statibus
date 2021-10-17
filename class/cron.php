@@ -184,6 +184,9 @@ class cron {
         if ($row[2] == 1 && $last != 0) { $total = $total + ($row[3] - $last); }
         if ($row[2] == 0) { $last = $row[3]; } else { $last = 0; }
       }
+      if (count($outages['values']) == $i and $row[3] < $line and $row[2] == 0) {
+        $total = $total (time() - $row[3]);
+      }
     }
     if ($last != 0) { $total = $total + (time() - $last); }
     return bcdiv($total,60,2);
