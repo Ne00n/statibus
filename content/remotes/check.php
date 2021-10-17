@@ -22,7 +22,7 @@ $payload = json_decode(file_get_contents('php://input'),true);
 $requestIP = $_SERVER['REMOTE_ADDR'];
 
 if ($method == 'POST' && json_last_error() === 0 && in_array($requestIP, $whitelist)) {
-  if ((filter_var($payload['target'], FILTER_VALIDATE_IP) || filter_var($payload['target'], FILTER_VALIDATE_DOMAIN)) && ($payload['type'] == 'ping' || ($payload['type'] == 'tcp' && is_numeric($payload['port'])) || $payload['type'] == 'http')) {
+  if ((filter_var($payload['target'], FILTER_VALIDATE_IP) || filter_var($payload['target'], FILTER_VALIDATE_DOMAIN)) && ($payload['type'] == 'ping' || $payload['type'] == 'tcp' || $payload['type'] == 'http')) {
     $ipv6 = filter_var($payload['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     if ($payload['type'] == "ping") {
       if ($ipv6) {
