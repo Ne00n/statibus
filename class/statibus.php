@@ -95,14 +95,14 @@ class statibus {
         $row = $outages['rows'][$i]; $before = $outages['rows'][($i == 0 ? 0 : $i -1)];
         if ($row['status'] == 0 && !$closed) {
            $response[$row['id']]['header'] = 'Downtime';
-           $response[$row['id']]['message'] = 'since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
+           $response[$row['id']]['message'] = 'since '.date('d M H:i:s', $outages['rows'][$i]['timestamp']);
            $response[$row['id']]['timestamp'] = $row['timestamp'];
            $response[$row['id']]['downtime'] = 'ongoing';
            $response[$row['id']]['name'] = $row['name'];
            $response[$row['id']]['serviceID'] = $row['serviceID'];
          } elseif ($row['status'] == 0) {
-             $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
-           $response[$before['id']]['message'] = date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
+             $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60,1);
+           $response[$before['id']]['message'] = date('d M H:i:s', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
            $response[$before['id']]['downtime'] = tools::escape($diff);
            $closed = False;
          } elseif ($row['status'] == 1) {
