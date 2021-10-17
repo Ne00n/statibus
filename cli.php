@@ -18,36 +18,54 @@ if (count($argv) == 1) {
   if ($argv[1] == "init") {
     $statibus->sql()->init();
   } elseif ($argv[1] == 'service') {
-    if (isset($argv[2]) && $argv[2] == 'add') {
-      $statibus->serviceAdd($argv);
-    } elseif (isset($argv[2]) && $argv[2] == 'list') {
-      $statibus->serviceList();
-    } elseif (isset($argv[2]) && $argv[2] == 'delete') {
-      $statibus->serviceDelete($argv);
+    if (isset($argv[2])) {
+      switch ($argv[2]) {
+        case "add":
+            $statibus->serviceAdd($argv);
+            break;
+        case "list":
+            $statibus->serviceList();
+            break;
+        case "delete":
+            $statibus->serviceDelete($argv);
+            break;
+      }
     } else {
       print("service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>\n");
       print("service list\n");
       print("service delete <name>\n");
     }
   } elseif ($argv[1] == 'group') {
-    if (isset($argv[2]) && $argv[2] == 'add') {
-      $statibus->groupAdd($argv);
-    } elseif (isset($argv[2]) && $argv[2] == 'list') {
-      $statibus->groupList();
-    } elseif (isset($argv[2]) && $argv[2] == 'delete') {
-      $statibus->groupDelete($argv);
+    if (isset($argv[2])) {
+      switch ($argv[2]) {
+        case "add":
+            $statibus->groupAdd($argv);
+            break;
+        case "list":
+            $statibus->groupList();
+            break;
+        case "delete":
+            $statibus->groupDelete($argv);
+            break;
+      }
     } else {
       print("group add <name>\n");
       print("group list\n");
       print("group delete <name>\n");
     }
   } elseif ($argv[1] == 'remote') {
-    if (isset($argv[2]) && $argv[2] == 'add') {
-      $statibus->remoteAdd($argv);
-    } elseif (isset($argv[2]) && $argv[2] == 'list') {
-      $statibus->remoteList();
-    } elseif (isset($argv[2]) && $argv[2] == 'delete') {
-      $statibus->remoteDelete($argv);
+    if (isset($argv[2])) {
+      switch ($argv[2]) {
+        case "add":
+            $statibus->remoteAdd($argv);
+            break;
+        case "list":
+            $statibus->remoteList();
+            break;
+        case "delete":
+            $statibus->remoteDelete($argv);
+            break;
+      }
     } else {
       print("remote add <name> <url>\n");
       print("remote list\n");
