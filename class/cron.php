@@ -23,7 +23,6 @@ class cron {
           $this->rqlite->update(['UPDATE remotes SET status = ?,lastrun = ? WHERE id=?',0,time(),$remote['id']]);
         }
       }
-
     } else {
       echo "No Remotes found, skipping\n";
     }

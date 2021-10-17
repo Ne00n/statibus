@@ -34,14 +34,6 @@ class statibus {
     return True;
   }
 
-  public function serviceList() {
-    return $this->list("services");
-  }
-
-  public function serviceDelete($params) {
-    return $this->delete("services",$params);
-  }
-
   public function groupAdd($params) {
     $response = $this->rqlite->insert(['INSERT INTO groups(name) VALUES(?)',$params[3]]);
 
@@ -50,28 +42,12 @@ class statibus {
     return True;
   }
 
-  public function groupList() {
-    return $this->list("groups");
-  }
-
-  public function groupDelete($params) {
-    return $this->delete("groups",$params);
-  }
-
   public function remoteAdd($params) {
     $response = $this->rqlite->insert(['INSERT INTO remotes(name,url) VALUES(?,?)',$params[3],$params[4]]);
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
     return True;
-  }
-
-  public function remoteList() {
-    return $this->list("remotes");
-  }
-
-  public function remoteDelete($params) {
-    return $this->delete("remotes",$params);
   }
 
   public function list($table) {

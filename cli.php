@@ -24,10 +24,10 @@ if (count($argv) == 1) {
             $statibus->serviceAdd($argv);
             break;
         case "list":
-            $statibus->serviceList();
+            $statibus->list("services");
             break;
         case "delete":
-            $statibus->serviceDelete($argv);
+            $statibus->delete("services",$argv);
             break;
       }
     } else {
@@ -42,10 +42,10 @@ if (count($argv) == 1) {
             $statibus->groupAdd($argv);
             break;
         case "list":
-            $statibus->groupList();
+            $statibus->list("groups");
             break;
         case "delete":
-            $statibus->groupDelete($argv);
+            $statibus->delete("groups",$argv);
             break;
       }
     } else {
@@ -60,10 +60,10 @@ if (count($argv) == 1) {
             $statibus->remoteAdd($argv);
             break;
         case "list":
-            $statibus->remoteList();
+            $statibus->list("remotes");
             break;
         case "delete":
-            $statibus->remoteDelete($argv);
+            $statibus->delete("remotes",$argv);
             break;
       }
     } else {
