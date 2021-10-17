@@ -55,7 +55,7 @@ class cron {
   public function check($options) {
     $data = $this->rqlite->select(['SELECT * FROM services WHERE id=?',$options['i']],True);
     if (!isset($data['rows'][0])) { echo "Entry not found.\n"; die(); }
-    $remotes = $this->rqlite->select(['SELECT * FROM remotes'],True);
+    $remotes = $this->rqlite->select(['SELECT * FROM remotes WHERE status = ?',1],True);
 
     $data = $data['rows'][0];
     $ipv6 = filter_var($data['target'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
