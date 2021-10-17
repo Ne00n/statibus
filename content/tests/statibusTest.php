@@ -17,7 +17,7 @@ class statibusTest extends TestCase {
   }
 
   public function testListGroup(): void {
-    $this->assertTrue($this->statibus->groupList());
+    $this->assertTrue($this->statibus->list("groups"));
   }
 
   public function testAddService(): void {
@@ -28,11 +28,11 @@ class statibusTest extends TestCase {
   }
 
   public function testListService(): void {
-    $this->assertTrue($this->statibus->serviceList());
+    $this->assertTrue($this->statibus->list("services"));
   }
 
   public function testDeleteService(): void {
-    $this->assertTrue($this->statibus->serviceDelete(array(3 => 'Server')));
+    $this->assertTrue($this->statibus->delete("services",array(3 => 'Server')));
   }
 
   public function testDeleteGroup(): void {
