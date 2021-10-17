@@ -33,7 +33,7 @@ if ($method == 'POST' && json_last_error() === 0 && in_array($requestIP, $whitel
       if ($result == 0) { $status = 1; } else { $status = 0; }
       echo json_encode(array('result' => $status));
 
-    } elseif ($payload['type'] == 'tcp') {
+    } elseif ($payload['type'] == 'port') {
       if ($ipv6) {
         list($ip, $port) = explode("]:", $payload['target']);
         $fp = fsockopen("[".$ip."]",$port, $errno, $errstr, $payload['timeout']);
