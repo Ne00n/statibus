@@ -132,7 +132,7 @@ class cron {
           $status = $this->checkHTTPResponse($data['httpcodes'],$response['http'],$service['keyword'],$content['content']);
           if ($status) { $success++; } else { $failed++; }
         } else {
-          if ($content['status']) { $success++; } else { $failed++; }
+          if ($content['result']) { $success++; } else { $failed++; }
         }
       } elseif ($response['http'] == 0) {
         $errors++;
