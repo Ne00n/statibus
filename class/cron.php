@@ -12,6 +12,22 @@ class cron {
   }
 
   public function run() {
+    print("Checking Remotes\n");
+    $remotes = $this->rqlite->select(['SELECT * FROM remotes'],True);
+    if (isset($remotes['rows'][0])) {
+      foreach ($remotes['rows'] as $remote) {
+        $response = $this->rqlite->fetchData($remote['url'],"GET",NULL,True,2);
+        if ($response['http'] == 200) {
+          $this->rqlite->update(['UPDATE remotes SET status = ?,lastrun = ? WHERE id=?',1,time(),$remote['id']]);
+        } else {
+          $this->rqlite->update(['UPDATE remotes SET status = ?,lastrun = ? WHERE id=?',0,time(),$remote['id']]);
+        }
+      }
+
+    } else {
+      echo "No Remotes found, skipping\n";
+    }
+
     $services = $this->rqlite->select('SELECT * FROM services',True);
     if (isset($services['rows'][0])) {
       foreach ($services['rows'] as $row) {
