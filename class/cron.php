@@ -175,9 +175,9 @@ class cron {
     }
   }
 
-  private function calcWindow($outages,$window=1) {
+  private function calcWindow($outages,$window=1,$detail=False) {
     $last = 0; $total = 0;
-    $line = time() - (86400 * $window);
+    if ($detail) { $line = strtotime('today'); } else { $line = time() - (86400 * $window); }
     for ($i = 0; $i <= count($outages['values']) -1; $i++) {
       $row = $outages['values'][$i];
       if ($row[3] > $line) {
@@ -197,6 +197,8 @@ class cron {
     $response[1] = 100 - bcmul( bcdiv($this->calcWindow($outages,1),1440 * 1,6) ,100,6);
     $response[7] = 100 - bcmul( bcdiv($this->calcWindow($outages,7),1440 * 7,6) ,100,6);
     $response[14] = 100 - bcmul( bcdiv($this->calcWindow($outages,14),1440 * 14,6) ,100,6);
+    //Same as 1, however for the details we need a fixed midnight window
+    $response[24] = 100 - bcmul( bcdiv($this->calcWindow($outages,1,True),1440 * 1,6) ,100,6);
     $response[30] = 100 - bcmul( bcdiv($this->calcWindow($outages,30),1440 * 30,6) ,100,6);
     $response[90] = 100 - bcmul( bcdiv($this->calcWindow($outages,90),1440 * 90,6) ,100,6);
     return $response;
@@ -205,7 +207,7 @@ class cron {
   private function generateDetailed($row,$outages) {
     if ($outages != NULL) { $data = $this->calcUptime($outages); } else { $data = array(); }
     $detailed = json_decode(base64_decode($row[1]),true); $current = strtotime('today midnight');
-    if ($outages != NULL) { $detailed[$current] = $data[1]; } else { $detailed[$current] = 100; }
+    if ($outages != NULL) { $detailed[$current] = $data[24]; } else { $detailed[$current] = 100; }
     //Cleanup
     $deadline = time() - (86400 * _cleanup);
     foreach ($detailed as $timestamp => $percentage) {
