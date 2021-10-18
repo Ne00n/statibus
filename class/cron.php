@@ -206,7 +206,7 @@ class cron {
 
   private function generateDetailed($row,$outages) {
     if ($outages != NULL) { $data = $this->calcUptime($outages); } else { $data = array(); }
-    $detailed = json_decode(base64_decode($row[1]),true); $current = strtotime('today midnight');
+    $detailed = json_decode(base64_decode($row['detailed']),true); $current = strtotime('today midnight');
     if ($outages != NULL) { $detailed[$current] = $data[24]; } else { $detailed[$current] = 100; }
     //Cleanup
     $deadline = time() - (86400 * _cleanup);
@@ -219,15 +219,15 @@ class cron {
   }
 
   public function uptime() {
-    $uptime = $this->rqlite->select(['SELECT * FROM uptime']);
-    foreach ($uptime['values'] as $row) {
-      $outages = $this->rqlite->select(['SELECT * FROM outages WHERE serviceID = ? AND flag is null',$row[0]]);
+    $uptime = $this->rqlite->select(['SELECT * FROM uptime'],True);
+    foreach ($uptime['rows'] as $row) {
+      $outages = $this->rqlite->select(['SELECT * FROM outages WHERE serviceID = ? AND flag is null',$row['serviceID']]);
       if (!isset($outages['values'])) {
         $response = $this->generateDetailed($row,NULL);
-        $response = $this->rqlite->update(['UPDATE uptime SET detailed = ?, oneDay = ?,sevenDays = ?,fourteenDays = ?,thirtyDays = ?,ninetyDays = ? WHERE serviceID = ?',$response['detailed'],100.00,100.00,100.00,100.00,100.00,$row[0]]);
+        $response = $this->rqlite->update(['UPDATE uptime SET detailed = ?, oneDay = ?,sevenDays = ?,fourteenDays = ?,thirtyDays = ?,ninetyDays = ? WHERE serviceID = ?',$response['detailed'],100.00,100.00,100.00,100.00,100.00,$row['serviceID']]);
       } else {
         $response = $this->generateDetailed($row,$outages);
-        $response = $this->rqlite->update(['UPDATE uptime SET detailed = ?, oneDay = ?,sevenDays = ?,fourteenDays = ?,thirtyDays = ?,ninetyDays = ? WHERE serviceID = ?',$response['detailed'],$response['data'][1],$response['data'][7],$response['data'][14],$response['data'][30],$response['data'][90],$row[0]]);
+        $response = $this->rqlite->update(['UPDATE uptime SET detailed = ?, oneDay = ?,sevenDays = ?,fourteenDays = ?,thirtyDays = ?,ninetyDays = ? WHERE serviceID = ?',$response['detailed'],$response['data'][1],$response['data'][7],$response['data'][14],$response['data'][30],$response['data'][90],$row['serviceID']]);
       }
     }
   }
