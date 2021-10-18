@@ -18,7 +18,7 @@ $data = $data['rows'][0];
   <div class="container">
     <div class="item">
       <h2 class="mb-0"><?php echo tools::escape($data['name']); ?></h2>
-      <a href="index.php"><p class="mt-0"><- Return</p></a>
+      <a href="index.php"><p class="mt-0">&lt;- Return</p></a>
     </div>
     <div id="rstatus" class="item text-right">
       <h2 class="mb-0">Service Status</h2>
