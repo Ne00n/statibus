@@ -36,6 +36,10 @@ You should add at least 2 remotes, the more the better. The queries will be rota
 
 **You can access the databse anytime via ./rqlite in case the commands are not enough.**
 
+## Caching
+rqlite has its limits at about 250 requests per second, due to the raft consensus.<br />
+So you should setup some type of caching, 1s is enough to prevent rqlite from not responding to queries.<br />
+
 ## Updating
 SQL Migrations: https://github.com/Ne00n/statibus/tree/main/migrations
 
