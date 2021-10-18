@@ -56,7 +56,7 @@ $data = $data['rows'][0];
         }
         echo '<div class="block"><p class="text-center">'.$outage['message'].'</p></div>';
         if ($outage['downtime'] == 'ongoing') {
-          echo '<div class="block text-center">ongoing</div>';
+          echo '<div class="block"><p class="text-center">ongoing</p></div>';
         } else {
           echo '<div class="block"><p class="text-center">'.$outage['downtime'].'m</p></div>';
         }
