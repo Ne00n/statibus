@@ -50,7 +50,7 @@ $data = $data['rows'][0];
       foreach ($outages as $outage) {
         echo '<div class="container">';
         if ($outage['header'] == 'Downtime') {
-          echo '<div class="block red"><p>Downtime</p></div>';
+          echo '<div class="block red"><p class="text-center">Downtime</p></div>';
         } else {
           echo '<div class="block orange"><p>Origin Network issue</p></div>';
         }
