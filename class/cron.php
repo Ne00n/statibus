@@ -178,13 +178,13 @@ class cron {
   private function calcWindow($outages,$window=1,$detail=False) {
     $last = 0; $total = 0;
     if ($detail) { $line = strtotime('today'); } else { $line = time() - (86400 * $window); }
-    for ($i = 0; $i <= count($outages['values']) -1; $i++) {
-      $row = $outages['values'][$i];
-      if ($row[3] > $line) {
-        if ($row[2] == 1 && $last != 0) { $total = $total + ($row[3] - $last); }
-        if ($row[2] == 0) { $last = $row[3]; } else { $last = 0; }
+    for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
+      $row = $outages['rows'][$i];
+      if ($row['timestamp'] > $line) {
+        if ($row['status'] == 1 && $last != 0) { $total = $total + ($row['timestamp'] - $last); }
+        if ($row['status'] == 0) { $last = $row['timestamp']; } else { $last = 0; }
       }
-      if (count($outages['values']) -1 == $i and $row[3] < $line and $row[2] == 0) {
+      if (count($outages['rows']) -1 == $i and $row['timestamp'] < $line and $row['status'] == 0) {
         $total = $total + (time() - $line);
       }
     }
@@ -221,8 +221,8 @@ class cron {
   public function uptime() {
     $uptime = $this->rqlite->select(['SELECT * FROM uptime'],True);
     foreach ($uptime['rows'] as $row) {
-      $outages = $this->rqlite->select(['SELECT * FROM outages WHERE serviceID = ? AND flag is null',$row['serviceID']]);
-      if (!isset($outages['values'])) {
+      $outages = $this->rqlite->select(['SELECT * FROM outages WHERE serviceID = ? AND flag is null',$row['serviceID']],True);
+      if (!isset($outages['rows'][0])) {
         $response = $this->generateDetailed($row,NULL);
         $response = $this->rqlite->update(['UPDATE uptime SET detailed = ?, oneDay = ?,sevenDays = ?,fourteenDays = ?,thirtyDays = ?,ninetyDays = ? WHERE serviceID = ?',$response['detailed'],100.00,100.00,100.00,100.00,100.00,$row['serviceID']]);
       } else {
