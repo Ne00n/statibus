@@ -34,6 +34,29 @@ $data = $data['rows'][0];
       ?>
     </div>
     <div class="item ">
+      <h2 class="mb-0">Overall Uptime</h2>
+    </div>
+    <div class="item">
+
+    </div>
+    <div class="item box">
+      <div class="container">
+
+        <div class="block mt-1 text-center">
+          <span class="inline"><?php echo number_format((float)tools::escape($data['oneDay']), 4, '.', '');  ?>%</span>
+          <p class="mt-0">Last 24 hours</p>
+        </div>
+        <div class="block mt-1 text-center">
+          <span class="inline"><?php echo number_format((float)tools::escape($data['sevenDays']), 4, '.', '');  ?>%</span>
+          <p class="mt-0">Last 7 days</p>
+        </div>
+        <div class="block mt-1 text-center">
+          <span class="inline"><?php echo number_format((float)tools::escape($data['thirtyDays']), 4, '.', ''); ?>%</span>
+          <p class="mt-0">Last 30 days</p>
+        </div>
+      </div>
+    </div>
+    <div class="item ">
       <h2 class="mb-0">Events <small>Last 90 Days</small></h2>
     </div>
     <div class="item">
@@ -66,29 +89,6 @@ $data = $data['rows'][0];
 
     ?>
 
-    </div>
-    <div class="item ">
-      <h2 class="mb-0">Overall Uptime</h2>
-    </div>
-    <div class="item">
-
-    </div>
-    <div class="item box">
-      <div class="container">
-
-        <div class="block mt-1 text-center">
-          <span class="inline"><?php echo number_format((float)tools::escape($data['oneDay']), 4, '.', '');  ?>%</span>
-          <p class="mt-0">Last 24 hours</p>
-        </div>
-        <div class="block mt-1 text-center">
-          <span class="inline"><?php echo number_format((float)tools::escape($data['sevenDays']), 4, '.', '');  ?>%</span>
-          <p class="mt-0">Last 7 days</p>
-        </div>
-        <div class="block mt-1 text-center">
-          <span class="inline"><?php echo number_format((float)tools::escape($data['thirtyDays']), 4, '.', ''); ?>%</span>
-          <p class="mt-0">Last 30 days</p>
-        </div>
-      </div>
     </div>
 
   </div>
