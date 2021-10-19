@@ -23,7 +23,7 @@ class cron {
         $response = $this->rqlite->fetchData($remote['url'],"GET",NULL,True,2);
         if ($response['http'] == 200 && json_last_error() === 0) {
           $content = json_decode($response['content'],true);
-          if ($content['status'] == "ok") {
+          if (isset($content['status']) && $content['status'] == "ok") {
             $this->setRemote($remote['id'],1);
             continue;
           }
