@@ -22,7 +22,7 @@ $data = $data['rows'][0];
     </div>
     <div id="rstatus" class="item text-right">
       <h2 class="mb-0">Service Status</h2>
-      <p class="mt-0">Last update: <?php echo date('d M H:i', $data['lastrun']); ?></p>
+      <p class="mt-0">Last update: <?php echo date(_timeFormat, $data['lastrun']); ?></p>
     </div>
     <div class="item box">
       <?php

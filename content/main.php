@@ -24,7 +24,7 @@ if (isset($data['rows'])) {
     </div>
     <div id="rstatus" class="item text-right">
       <h2 class="mb-0">Service Status</h2>
-      <p class="mt-0">Last update: <?php echo date('d M H:i', $lastrun); ?></p>
+      <p class="mt-0">Last update: <?php echo date(_timeFormat, $lastrun); ?></p>
     </div>
     <div class="item box">
       <div class="container p-0">

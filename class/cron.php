@@ -63,7 +63,7 @@ class cron {
          $rss .= '<title>'.$event['name'].' '.$event['header'].'</title>';
          $rss .= '<link>https://'._domain.'/index.php?service='.$event['serviceID'].'</link>';
          $rss .= '<description>'.$event['message'].'</description>';
-         $rss .= '<pubDate>' . date("D, d M Y H:i:s O", $event['timestamp']) . '</pubDate></item>'."\r\n";
+         $rss .= '<pubDate>' . date(_timeFormatRSS, $event['timestamp']) . '</pubDate></item>'."\r\n";
     }
     $rss .= "</channel>\r\n</rss>";
     file_put_contents('feed.rss', $rss);

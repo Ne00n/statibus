@@ -96,11 +96,11 @@ class statibus {
         if ($row['status'] == 0 && !$closed) {
           $response[$row['id']] = $row;
           $response[$row['id']]['header'] = 'Downtime';
-          $response[$row['id']]['message'] = 'since '.date('d M H:i:s', $outages['rows'][$i]['timestamp']);
+          $response[$row['id']]['message'] = 'since '.date(_timeFormatDetails, $outages['rows'][$i]['timestamp']);
           $response[$row['id']]['downtime'] = 'ongoing';
         } elseif ($row['status'] == 0) {
           $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
-          $response[$before['id']]['message'] = date('d M H:i:s', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i:s', $outages['rows'][$i -1]['timestamp']);
+          $response[$before['id']]['message'] = date(_timeFormatDetails, $outages['rows'][$i]['timestamp']).' until '.date(_timeFormatDetails, $outages['rows'][$i -1]['timestamp']);
           $response[$before['id']]['downtime'] = tools::escape($diff);
           $closed = False;
          } elseif ($row['status'] == 1) {
