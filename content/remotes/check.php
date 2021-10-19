@@ -2,6 +2,8 @@
 //Add your IP here
 $whitelist = array('');
 
+if (!extension_loaded('curl')) { echo "curl extension missing."; die(); }
+
 function createRequest($url,$timeout = 1,$connect = 1) {
   $result = array();
   $request = curl_init();
