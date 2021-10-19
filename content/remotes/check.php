@@ -50,6 +50,8 @@ if ($method == 'POST' && json_last_error() === 0 && in_array($requestIP, $whitel
 
     }
   }
+} elseif ($method == 'GET' && in_array($requestIP, $whitelist)) {
+  echo json_encode(array('status' => 'ok'));
 }
 
 ?>
