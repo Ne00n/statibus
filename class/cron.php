@@ -11,17 +11,24 @@ class cron {
     $this->statibus = new statibus($rqliteIP,$rqlitePort);
   }
 
+  private function setRemote($id,$status) {
+    return $this->rqlite->update(['UPDATE remotes SET status = ?,lastrun = ? WHERE id=?',$status,time(),$id]);
+  }
+
   public function run() {
     print("Checking Remotes\n");
     $remotes = $this->rqlite->select(['SELECT * FROM remotes'],True);
     if (isset($remotes['rows'][0])) {
       foreach ($remotes['rows'] as $remote) {
         $response = $this->rqlite->fetchData($remote['url'],"GET",NULL,True,2);
-        if ($response['http'] == 200) {
-          $this->rqlite->update(['UPDATE remotes SET status = ?,lastrun = ? WHERE id=?',1,time(),$remote['id']]);
-        } else {
-          $this->rqlite->update(['UPDATE remotes SET status = ?,lastrun = ? WHERE id=?',0,time(),$remote['id']]);
+        if ($response['http'] == 200 && json_last_error() === 0) {
+          $content = json_decode($response['content'],true);
+          if ($content['status'] == "ok") {
+            $this->setRemote($remote['id'],1);
+            continue;
+          }
         }
+        $this->setRemote($remote['id'],0);
       }
     } else {
       echo "No Remotes found, skipping\n";
