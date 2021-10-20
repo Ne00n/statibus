@@ -17,12 +17,12 @@ $data = $data['rows'][0];
 <body>
   <div class="container">
     <div class="item">
-      <h2 class="mb-0"><?php echo tools::escape($data['name']); ?></h2>
-      <a href="index.php"><p class="mt-0"><- Return</p></a>
+      <a href="index.php?service=<?php echo tools::escape($serviceID); ?>"><h2 class="mb-0"><?php echo tools::escape($data['name']); ?></h2></a>
+      <a href="index.php"><p class="mt-0">&lt;- Return</p></a>
     </div>
     <div id="rstatus" class="item text-right">
       <h2 class="mb-0">Service Status</h2>
-      <p class="mt-0">Last update: <?php echo date('d M H:i', $data['lastrun']); ?></p>
+      <p class="mt-0">Last update: <?php echo date(_timeFormat, $data['lastrun']); ?></p>
     </div>
     <div class="item box">
       <?php
@@ -32,40 +32,6 @@ $data = $data['rows'][0];
         echo '<h2 class="ml-1"><span class="dot dot-green"></span> '.tools::escape($data['name']).' is <blah class="green">operational</blah></h2>';
       }
       ?>
-    </div>
-    <div class="item ">
-      <h2 class="mb-0">Events <small>Last 90 Days</small></h2>
-    </div>
-    <div class="item">
-
-    </div>
-    <div class="item box">
-    <?php
-
-    $outages = $statibus->getOutagesArray($serviceID);
-
-    if (empty($outages)) {
-      echo '<h2 class="text-center">No records.</h2>';
-    } else {
-      foreach ($outages as $outage) {
-        echo '<div class="container">';
-        if ($outage['header'] == 'Downtime') {
-          echo '<div class="block red"><p>Downtime</p></div>';
-        } else {
-          echo '<div class="block orange"><p>Origin Network issue</p></div>';
-        }
-        echo '<div class="block"><p class="text-center">'.$outage['message'].'</p></div>';
-        if ($outage['downtime'] == 'ongoing') {
-          echo '<div class="block text-center">ongoing</div>';
-        } else {
-          echo '<div class="block"><p class="text-center">'.$outage['downtime'].'m</p></div>';
-        }
-        echo '</div>';
-      }
-    }
-
-    ?>
-
     </div>
     <div class="item ">
       <h2 class="mb-0">Overall Uptime</h2>
@@ -89,6 +55,40 @@ $data = $data['rows'][0];
           <p class="mt-0">Last 30 days</p>
         </div>
       </div>
+    </div>
+    <div class="item ">
+      <h2 class="mb-0">Events <small>Last 90 Days</small></h2>
+    </div>
+    <div class="item">
+
+    </div>
+    <div class="item box">
+    <?php
+
+    $outages = $statibus->getOutagesArray($serviceID);
+
+    if (empty($outages)) {
+      echo '<h2 class="text-center">No records.</h2>';
+    } else {
+      foreach ($outages as $outage) {
+        echo '<div class="container">';
+        if ($outage['header'] == 'Downtime') {
+          echo '<div class="block red"><p class="text-center">Downtime</p></div>';
+        } else {
+          echo '<div class="block orange"><p>Origin Network issue</p></div>';
+        }
+        echo '<div class="block"><p class="text-center">'.$outage['message'].'</p></div>';
+        if ($outage['downtime'] == 'ongoing') {
+          echo '<div class="block"><p class="text-center">ongoing</p></div>';
+        } else {
+          echo '<div class="block"><p class="text-center">'.$outage['downtime'].'m</p></div>';
+        }
+        echo '</div>';
+      }
+    }
+
+    ?>
+
     </div>
 
   </div>

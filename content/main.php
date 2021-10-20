@@ -24,7 +24,7 @@ if (isset($data['rows'])) {
     </div>
     <div id="rstatus" class="item text-right">
       <h2 class="mb-0">Service Status</h2>
-      <p class="mt-0">Last update: <?php echo date('d M H:i', $lastrun); ?></p>
+      <p class="mt-0">Last update: <?php echo date(_timeFormat, $lastrun); ?></p>
     </div>
     <div class="item box">
       <div class="container p-0">
@@ -62,8 +62,9 @@ if (isset($data['rows'])) {
         }
 
         echo '<div class="container">';
-        echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline service-text">'.$row['name'].'</p></a><span class="green inline pull-right mt-1 mr-1">'.($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2)."%" : 'n/a').'</span></div>';
-        echo '<div class="uptime mt-05"><svg width="100%" height="20" viewBox="0 0 640 20">';
+        $percentage = ($row['ninetyDays'] ? number_format(floor($row['ninetyDays']*100)/100, 2) : 0);
+        echo '<div class="service"><a href="index.php?service='.tools::escape($row['id']).'"><p class="inline service-text">'.$row['name'].'</p></a><span class="'.$statibus->getColor($percentage).' inline pull-right mt-1 mr-1">'.($percentage ? $percentage."%" : 'n/a').'</span></div>';
+        echo '<div class="uptime"><svg width="100%" height="20" viewBox="0 0 640 20">';
         $detailed = json_decode(base64_decode($row['detailed']),True); $spacing = 7;
         $keys = array_keys($detailed);
         if ($detailed == False || $detailed == "[]") {
@@ -76,15 +77,7 @@ if (isset($data['rows'])) {
             if ($negate <= $i) {
               $selector = $i - $negate;
               $percentage = $detailed[$keys[$selector]];
-              if ($percentage == 100) {
-                echo '<rect class="green" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-              } elseif ($percentage < 100 && $percentage > 99) {
-                 echo '<rect class="darkgreen" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-              } elseif ($percentage < 99 && $percentage > 97) {
-                echo '<rect class="orange" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-              } else {
-                echo '<rect class="red" height="18" width="5" x="'.$i*$spacing.'"></rect>';
-              }
+              echo '<rect class="'.$statibus->getColor($percentage).'" height="18" width="5" x="'.$i*$spacing.'"></rect>';
             } else {
               echo '<rect class="new" height="18" width="5" x="'.$i*$spacing.'"></rect>';
             }

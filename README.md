@@ -12,11 +12,12 @@ Minimalistic Statuspage with 30,60s interval Ping, Port & HTTP(S) IPv4 & IPv6 Mo
 - Zero Javascript
 
 **ToDo**<br />
-- external checks
+- nothin
 
 ## QuickSetup:
 
-1. Get a rqlite instance up and running
+1. Get a [rqlite](https://github.com/rqlite/rqlite/releases) instance up and running<br />
+Check configs/rqlite.service if you wish to run rqlite as a service.
 2. Rename configs/config.example.php to configs/config.php, you may edit it
 2. To Initialize the databse run:
 ```
@@ -29,17 +30,23 @@ php cli.php service add Servers Server ping 8.8.8.8
 ```
 5. Enable the cronjobs, see => configs/cron|uptime.example<br />
 Run cron every 60s, uptime is for generating the uptime percentages, every 5 minutes is fine
+6. Optional you use remote probes to confirm downtimes.<br />
+To do this, put the check.php file in content/remotes on a remote server, whitelist the statibus ip and add it to statibus.<br />
+You should add at least 2 remotes, the more the better. The queries will be rotated between the remotes.<br />
 
 **You can access the databse anytime via ./rqlite in case the commands are not enough.**
+
+## Caching
+rqlite has its limits at about 250 requests per second, due to the raft consensus.<br />
+So you should setup some type of caching, 1s is enough to prevent rqlite from not responding to queries.<br />
 
 ## Updating
 SQL Migrations: https://github.com/Ne00n/statibus/tree/main/migrations
 
 ## CLI
 **service**<br />
-- add
 ```
-#php cli.php service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>
+php cli.php service add <group> <name> <method> <target> <timeout> <httpcode(s)> <keyword>
 ```
 Examples:
 ```
@@ -48,15 +55,19 @@ php cli.php service add Servers Service port 8.8.8.8:80 2
 php cli.php service add Servers Website http https://website.com 2 200
 php cli.php service add Servers Website http https://website.com 2 400,404
 php cli.php service add Servers Keyword http https://keyword.com 2 200 clusterfuck
-```
-- other
-```
 php cli.php service list
 php cli.php service delete <name>
 ```
 **group**<br />
 ```
-php cli.php group add test
+php cli.php group add <name>
 php cli.php group list
-php cli.php group delete test
+php cli.php group delete <name>
+```
+**remotes** (optional)<br />
+```
+#url example: https://check.com/check.php you can rename the file of course
+php cli.php remote add <name> <url>
+php cli.php remote list
+php cli.php remote delete <name>
 ```

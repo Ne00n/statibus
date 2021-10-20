@@ -1,0 +1,14 @@
+[Unit]
+Description=rqlite service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=statibus
+Group=statibus
+Type=simple
+WorkingDirectory=/home/statibus/rqlite
+ExecStart=/home/statibus/rqlite/rqlited datadir
+
+[Install]
+WantedBy=multi-user.target

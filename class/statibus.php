@@ -34,23 +34,6 @@ class statibus {
     return True;
   }
 
-  public function serviceList() {
-    $response = $this->rqlite->select(['SELECT * FROM services'],True);
-    if (empty($response)) { echo json_encode(array('error' => 'No services added.'),JSON_PRETTY_PRINT)."\n"; return False; }
-
-    tools::checkRow($response);
-    echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
-    return True;
-  }
-
-  public function serviceDelete($params) {
-    $response = $this->rqlite->delete(['DELETE FROM services WHERE name=?',$params[3]]);
-
-    $status = tools::checkResult($response);
-    print($status."\n"); if ($status != "Success") { return False; }
-    return True;
-  }
-
   public function groupAdd($params) {
     $response = $this->rqlite->insert(['INSERT INTO groups(name) VALUES(?)',$params[3]]);
 
@@ -59,17 +42,25 @@ class statibus {
     return True;
   }
 
-  public function groupList() {
-    $response = $this->rqlite->select(['SELECT * FROM groups'],True);
-    if (empty($response)) { echo json_encode(array('error' => 'No groups added.'),JSON_PRETTY_PRINT)."\n"; return False; }
+  public function remoteAdd($params) {
+    $response = $this->rqlite->insert(['INSERT INTO remotes(name,url) VALUES(?,?)',$params[3],$params[4]]);
+
+    $status = tools::checkResult($response);
+    print($status."\n"); if ($status != "Success") { return False; }
+    return True;
+  }
+
+  public function list($table) {
+    $response = $this->rqlite->select(['SELECT * FROM '.$table],True);
+    if (empty($response)) { echo json_encode(array('error' => 'Nothing added.'),JSON_PRETTY_PRINT)."\n"; return False; }
 
     tools::checkRow($response);
     echo json_encode($response['rows'],JSON_PRETTY_PRINT)."\n";
     return True;
   }
 
-  public function groupDelete($params) {
-    $response = $this->rqlite->delete(['DELETE FROM groups WHERE name=?',$params[3]]);
+  public function delete($table,$params) {
+    $response = $this->rqlite->delete(['DELETE FROM '.$table.' WHERE name=?',$params[3]]);
 
     $status = tools::checkResult($response);
     print($status."\n"); if ($status != "Success") { return False; }
@@ -103,27 +94,35 @@ class statibus {
       for ($i = 0; $i <= count($outages['rows']) -1; $i++) {
         $row = $outages['rows'][$i]; $before = $outages['rows'][($i == 0 ? 0 : $i -1)];
         if ($row['status'] == 0 && !$closed) {
-           $response[$row['id']]['header'] = 'Downtime';
-           $response[$row['id']]['message'] = 'since '.date('d M H:i', $outages['rows'][$i]['timestamp']);
-           $response[$row['id']]['timestamp'] = $row['timestamp'];
-           $response[$row['id']]['downtime'] = 'ongoing';
-           $response[$row['id']]['name'] = $row['name'];
-           $response[$row['id']]['serviceID'] = $row['serviceID'];
-         } elseif ($row['status'] == 0) {
-             $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
-           $response[$before['id']]['message'] = date('d M H:i', $outages['rows'][$i]['timestamp']).' until '.date('d M H:i', $outages['rows'][$i -1]['timestamp']);
-           $response[$before['id']]['downtime'] = tools::escape($diff);
-           $closed = False;
+          $response[$row['id']] = $row;
+          $response[$row['id']]['header'] = 'Downtime';
+          $response[$row['id']]['message'] = 'since '.date(_timeFormatDetails, $outages['rows'][$i]['timestamp']);
+          $response[$row['id']]['downtime'] = 'ongoing';
+        } elseif ($row['status'] == 0) {
+          $diff = round( ($outages['rows'][$i -1]['timestamp'] - $outages['rows'][$i]['timestamp']) / 60);
+          $response[$before['id']]['message'] = date(_timeFormatDetails, $outages['rows'][$i]['timestamp']).' until '.date(_timeFormatDetails, $outages['rows'][$i -1]['timestamp']);
+          $response[$before['id']]['downtime'] = tools::escape($diff);
+          $closed = False;
          } elseif ($row['status'] == 1) {
-           $response[$row['id']]['header'] = ($outages['rows'][$i +1]['flag'] != NULL ? 'Origin Network issue' : 'Downtime');
-           $response[$row['id']]['timestamp'] = $row['timestamp'];
-           $response[$row['id']]['serviceID'] = $row['serviceID'];
-           $response[$row['id']]['name'] = $row['name'];
-           $closed = True;
+          $response[$row['id']] = $row;
+          $response[$row['id']]['header'] = ($outages['rows'][$i +1]['flag'] != NULL ? 'Origin Network issue' : 'Downtime');
+          $closed = True;
         }
       }
     }
     return $response;
+  }
+
+  public function getColor($percentage) {
+    if ($percentage >= 99.7) {
+      return "green";
+    } elseif ($percentage < 100 && $percentage > 99) {
+       return "darkgreen";
+    } elseif ($percentage < 99 && $percentage > 97) {
+      return "orange";
+    } else {
+      return "red";
+    }
   }
 
   public function sql() {
