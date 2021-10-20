@@ -149,13 +149,16 @@ class cron {
 
       $payload = json_encode(array('target' => $service['target'],'type' => $service['method'],'timeout' => $service['timeout']));
       $response = $this->rqlite->fetchData($remote['url'],"POST",$payload,True,$service['timeout'] * 3);
+      echo $remote['name']." response ".$response['http']."\n";
 
       if ($response['http'] == 200) {
         $content = json_decode($response['content'],true);
         if ($service['method'] == 'http') {
           $status = $this->checkHTTPResponse($data['httpcodes'],$response['http'],$service['keyword'],$content['content']);
+          echo ($status ? "Online" : 'Offline')."\n";
           if ($status) { $success++; } else { $failed++; }
         } else {
+          echo ($content['result'] ? "Online" : 'Offline')."\n";
           if ($content['result']) { $success++; } else { $failed++; }
         }
       } elseif ($response['http'] == 0) {
