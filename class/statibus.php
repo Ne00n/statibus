@@ -113,6 +113,18 @@ class statibus {
     return $response;
   }
 
+  public function getColor($percentage) {
+    if ($percentage == 100) {
+      return "green";
+    } elseif ($percentage < 100 && $percentage > 99) {
+       return "darkgreen";
+    } elseif ($percentage < 99 && $percentage > 97) {
+      return "orange";
+    } else {
+      return "red";
+    }
+  }
+
   public function sql() {
     return $this->rqlite;
   }
