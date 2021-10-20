@@ -114,9 +114,9 @@ class statibus {
   }
 
   public function getColor($percentage) {
-    if ($percentage == 100) {
+    if ($percentage >= 99.7) {
       return "green";
-    } elseif ($percentage < 99.8 && $percentage > 99) {
+    } elseif ($percentage < 100 && $percentage > 99) {
        return "darkgreen";
     } elseif ($percentage < 99 && $percentage > 97) {
       return "orange";
