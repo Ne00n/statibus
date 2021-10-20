@@ -68,8 +68,8 @@ class cron {
     $rss .= "</channel>\r\n</rss>";
     file_put_contents('feed.rss', $rss);
 
-    echo "Cleaning up history\n";
     if (_cleanup == 0) { return False; }
+    echo "Cleaning up history\n";
     $deadline = time() - (86400 * _cleanup);
     $this->rqlite->delete(['DELETE FROM outages WHERE timestamp < ?',$deadline]);
     return True;
