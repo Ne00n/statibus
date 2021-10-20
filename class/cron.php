@@ -72,6 +72,7 @@ class cron {
     if (_cleanup == 0) { return False; }
     $deadline = time() - (86400 * _cleanup);
     $this->rqlite->delete(['DELETE FROM outages WHERE timestamp < ?',$deadline]);
+    return True;
   }
 
   public function check($options) {
@@ -111,6 +112,7 @@ class cron {
     }
     $status = $this->remoteCheck($remotes,$status,$data);
     $this->updateStatus($data['id'],$status,$data['status']);
+    return True;
   }
 
   private function checkHTTPResponse($httpcodes,$http,$keyword,$content) {
@@ -237,6 +239,7 @@ class cron {
         $response = $this->rqlite->update(['UPDATE uptime SET detailed = ?, oneDay = ?,sevenDays = ?,fourteenDays = ?,thirtyDays = ?,ninetyDays = ? WHERE serviceID = ?',$response['detailed'],$response['data'][1],$response['data'][7],$response['data'][14],$response['data'][30],$response['data'][90],$row['serviceID']]);
       }
     }
+    return True;
   }
 
   public function findFalsePositives() {
@@ -255,6 +258,7 @@ class cron {
         }
       }
     }
+    return True;
   }
 
   private function searchScope($start,$end,$outages) {
