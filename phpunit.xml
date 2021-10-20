@@ -3,7 +3,6 @@
     <testsuite name="main">
       <file>content/tests/rqliteTest.php</file>
       <file>content/tests/statibusTest.php</file>
-      <file>content/tests/cronTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

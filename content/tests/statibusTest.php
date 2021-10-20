@@ -6,10 +6,10 @@ include_once 'configs/config.example.php';
 use PHPUnit\Framework\TestCase;
 
 class statibusTest extends TestCase {
-  private $statibus;
 
   public function setUp(): void {
     $this->statibus = new statibus(_rqliteIP,_rqlitePort);
+    $this->cron = new cron(_rqliteIP,_rqlitePort);
   }
 
   public function testAddGroup(): void {
@@ -29,6 +29,18 @@ class statibusTest extends TestCase {
 
   public function testListService(): void {
     $this->assertTrue($this->statibus->list("services"));
+  }
+
+  public function testRun(): void {
+    $this->assertTrue($this->cron->run());
+  }
+
+  public function testFindFalsePositives(): void {
+    $this->assertTrue($this->cron->findFalsePositives());
+  }
+
+  public function testUptime(): void {
+    $this->assertTrue($this->cron->uptime());
   }
 
   public function testDeleteService(): void {
