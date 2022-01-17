@@ -13,7 +13,7 @@ define("_timeFormatDetails",'d M H:i:s');
 define("_timeFormatRSS",'D, d M Y H:i:s O');
 
 //Cleanup history after x days, 0 = disabled
-define("_cleanup",91);
+define("_cleanup",180);
 
 //Threshold needed to flag as Online
 define("_remoteThreshold",1);
