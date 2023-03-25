@@ -3,17 +3,17 @@ language: php
 before_script:
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar install
-  - curl -L https://github.com/rqlite/rqlite/releases/download/v6.6.0/rqlite-v6.6.0-linux-amd64.tar.gz -o rqlite-v6.6.0-linux-amd64.tar.gz
-  - tar xvfz rqlite-v6.6.0-linux-amd64.tar.gz
-  - cd rqlite-v6.6.0-linux-amd64
+  - curl -L https://github.com/rqlite/rqlite/releases/download/v7.6.1/rqlite-v7.6.1-linux-amd64.tar.gz -o rqlite-v7.6.1-linux-amd64.tar.gz
+  - tar xvfz rqlite-v7.6.1-linux-amd64.tar.gz
+  - cd rqlite-v7.6.1-linux-amd64
   - ./rqlited ~/node.1 &
   - cd ..
   - sleep 5
 
 php:
-  - '7.3'
   - '7.4'
   - '8.0'
+  - '8.1'
   - nightly
 
 matrix:
