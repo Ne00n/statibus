@@ -75,7 +75,7 @@ $data = $data['rows'][0];
         if ($outage['header'] == 'Downtime') {
           echo '<div class="block red"><p class="text-center">Downtime</p></div>';
         } else {
-          echo '<div class="block orange"><p>Origin Network issue</p></div>';
+          echo '<div class="block orange text-center"><p>Origin Network issue</p></div>';
         }
         echo '<div class="block"><p class="text-center">'.$outage['message'].'</p></div>';
         if ($outage['downtime'] == 'ongoing') {
