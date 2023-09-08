@@ -81,9 +81,7 @@ class rqlite {
   }
 
   public function insert($sql) {
-    $result = $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST',"[".json_encode($sql)."]");
-    if (!$result) { return $result; }
-    return $result;
+    return $this->fetchData('http://'.$this->node.':'.$this->port.'/db/execute?pretty&timings','POST',"[".json_encode($sql)."]");
   }
 
   public function update($input) {
