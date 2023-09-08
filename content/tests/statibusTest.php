@@ -6,6 +6,8 @@ include_once 'configs/config.example.php';
 use PHPUnit\Framework\TestCase;
 
 class statibusTest extends TestCase {
+  private $statibus;
+  private $cron;
 
   public function setUp(): void {
     $this->statibus = new statibus(_rqliteIP,_rqlitePort);
