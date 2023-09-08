@@ -3,9 +3,9 @@ language: php
 before_script:
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar install
-  - curl -L https://github.com/rqlite/rqlite/releases/download/v7.6.1/rqlite-v7.6.1-linux-amd64.tar.gz -o rqlite-v7.6.1-linux-amd64.tar.gz
-  - tar xvfz rqlite-v7.6.1-linux-amd64.tar.gz
-  - cd rqlite-v7.6.1-linux-amd64
+  - curl -L https://github.com/rqlite/rqlite/releases/download/v7.21.4/rqlite-v7.21.4-linux-amd64.tar.gz -o rqlite-v7.21.4-linux-amd64.tar.gz
+  - tar xvfz rqlite-v7.21.4-linux-amd64.tar.gz
+  - cd rqlite-v7.21.4-linux-amd64
   - ./rqlited ~/node.1 &
   - cd ..
   - sleep 5
