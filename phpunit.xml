@@ -1,4 +1,4 @@
-<phpunit>
+<phpunit bootstrap="content/tests/autoload.php">
   <testsuites>
     <testsuite name="main">
       <file>content/tests/rqliteTest.php</file>
